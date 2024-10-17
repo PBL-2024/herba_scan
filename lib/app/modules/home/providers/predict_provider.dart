@@ -10,7 +10,7 @@ class PredictProvider extends GetConnect {
       request.headers['x-api-key'] = Config.MODEL_API_KEY;
       return request;
     });
-  //   Timeout
+    //   Timeout
     httpClient.timeout = const Duration(seconds: 10);
   }
 
@@ -19,7 +19,7 @@ class PredictProvider extends GetConnect {
       'file': MultipartFile(image.path, filename: image.name),
       'model': Config.MODEL_URL,
       'imgsz': '640',
-      'conf': '0.8',
+      'conf': '0.90',
       'iou': '0.25'
     });
 
