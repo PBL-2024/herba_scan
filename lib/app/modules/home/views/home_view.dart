@@ -10,6 +10,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController controller = Get.put(HomeController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('HomeView'),
@@ -17,7 +18,7 @@ class HomeView extends GetView<HomeController> {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => Get.to(() => LeafScanView()),
+          onPressed: () => Get.to(() => LeafScanView(),transition: Transition.rightToLeft),
           child: Text("Scan Daun"),
         ),
       ),

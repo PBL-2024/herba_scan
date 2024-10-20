@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  final _userProvider = Get.find<UserProvider>();
+  final box = GetStorage();
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    checkAuthStatus();
   }
 
   @override
@@ -19,5 +22,14 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  void checkAuthStatus() {
+    _userProvider.getUser().then((value) {
+      if (value.statusCode == 200) {
+        Get.snackbar('Halo...', 'Selamat Datang');
+      } else {
+        box.remove('token');
+        Get.offAllNamed('/auth');
+      }
+    });
+  }
 }
