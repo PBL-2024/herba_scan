@@ -194,19 +194,20 @@ class AuthView extends GetView<AuthController> {
                             ),
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () => Get.toNamed('/forget-password'),
-                            child: Text(
-                              'Lupa Kata Sandi?',
-                              style: TextStyle(
-                                color: Themes.textButtonColor,
-                                fontWeight: FontWeight.bold,
+                        if (controller.isLogin.value)
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () => Get.toNamed('/forget-password'),
+                              child: Text(
+                                'Lupa Kata Sandi?',
+                                style: TextStyle(
+                                  color: Themes.textButtonColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
                         const SizedBox(
                           height: 20,
                         ),

@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/app/data/models/auth/google.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
+import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 
 class AuthController extends GetxController {
   // Form input
@@ -33,6 +34,8 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    //   prevent user to go back to login page
+    checkTokenValid();
   }
 
   @override
@@ -60,7 +63,7 @@ class AuthController extends GetxController {
         }
       }
     } catch (error) {
-      Get.snackbar('Terjadi Kesalahan', error.toString());
+      Get.snackbar('Terjadi Kesalahan', 'Sila coba lagi atau hubungi admin');
     }
   }
 
@@ -85,5 +88,16 @@ class AuthController extends GetxController {
     emailController.clear();
     passwordController.clear();
     nameController.clear();
+  }
+
+  void checkTokenValid() async {
+    final _userProvider = Get.put(UserProvider());
+    final res = await _userProvider.getUser();
+    if (res.statusCode == 401) {
+      box.remove('token');
+      Get.offAllNamed('/auth');
+    } else if (res.statusCode == 200) {
+      Get.offAllNamed('/home');
+    }
   }
 }
