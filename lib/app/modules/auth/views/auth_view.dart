@@ -194,6 +194,55 @@ class AuthView extends GetView<AuthController> {
                             ),
                           ),
                         ),
+                        if (!controller.isLogin.value)
+                          ListTile(
+                            title: Text(
+                              'Konfirmasi Kata Sandi',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.all(0),
+                            subtitle: TextFormField(
+                              controller: controller.cPasswordController,
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: !controller.showPassword.value,
+                              validator: (val) {
+                                if (val!.isEmpty) {
+                                  return "Masukkan kata sandi yang valid";
+                                } else if (val !=
+                                    controller.passwordController.text) {
+                                  return "Kata sandi tidak sama";
+                                }
+                                return null;
+                              },
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                suffixIcon: Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: IconButton(
+                                    onPressed: () =>
+                                        controller.togglePassword(),
+                                    icon: Icon(
+                                      controller.showPassword.value
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                    ),
+                                  ),
+                                ),
+                                suffixStyle: const TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(30),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         if (controller.isLogin.value)
                           Container(
                             alignment: Alignment.centerRight,
@@ -217,8 +266,11 @@ class AuthView extends GetView<AuthController> {
                             fixedSize: const Size(double.infinity, 50),
                           ),
                           onPressed: () {
-                            print(controller.nameController.text);
-                            if (controller.formKey.currentState!.validate()) {}
+                            if (controller.formKey.currentState!.validate()) {
+                              controller.isLogin.value
+                                  ? controller.signIn()
+                                  : controller.signUp();
+                            }
                           },
                           child: SizedBox(
                             width: double.infinity,
