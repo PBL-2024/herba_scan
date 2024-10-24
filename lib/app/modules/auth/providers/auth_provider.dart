@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:herba_scan/app/data/models/auth/auth_user.dart';
 import 'package:herba_scan/config.dart';
 
 class AuthProvider extends GetConnect {

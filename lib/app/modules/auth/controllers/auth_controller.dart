@@ -78,7 +78,7 @@ class AuthController extends GetxController {
     try {
       await _googleSignIn.signOut();
       box.remove('token');
-    } on Exception catch (e) {
+    } catch (e) {
       Get.snackbar(
           'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
     }
