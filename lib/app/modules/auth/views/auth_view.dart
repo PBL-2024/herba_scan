@@ -107,7 +107,7 @@ class AuthView extends GetView<AuthController> {
                               },
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              keyboardType: TextInputType.emailAddress,
+                              keyboardType: TextInputType.text,
                               onEditingComplete: () =>
                                   FocusScope.of(context).nextFocus(),
                               decoration: const InputDecoration(
