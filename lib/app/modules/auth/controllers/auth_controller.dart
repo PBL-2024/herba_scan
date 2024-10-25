@@ -44,7 +44,7 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     //   prevent user to go back to login page
-    checkTokenValid();
+    // checkTokenValid();
   }
 
   @override
@@ -80,13 +80,27 @@ class AuthController extends GetxController {
   }
 
 //   Logout
-  Future<void> signOutGoogle() async {
+  Future<void> logout() async {
     try {
-      await _googleSignIn.signOut();
-      box.remove('token');
+      isLoading.value = true;
+      final res = await _authProvider.logout();
+      if (res.statusCode == 200) {
+        box.remove('token');
+        await _googleSignIn.signOut();
+        isLoading.value = false;
+        Get.offAllNamed('/auth');
+      } else {
+        throw 'Permintaan Gagal';
+      }
+      isLoading.value = false;
     } catch (e) {
+      isLoading.value = false;
       Get.snackbar(
           'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
+      box.remove('token');
+      await _googleSignIn.signOut();
+      isLoading.value = false;
+      Get.offAllNamed('/auth');
     }
   }
 
@@ -112,7 +126,9 @@ class AuthController extends GetxController {
     final res = await _userProvider.getUser();
     if (res.statusCode == 401) {
       box.remove('token');
-      Get.offAllNamed('/auth');
+      if (Get.currentRoute != '/auth') {
+        Get.offAllNamed('/auth');
+      }
     } else if (res.statusCode == 200) {
       Get.offAllNamed('/home');
     }

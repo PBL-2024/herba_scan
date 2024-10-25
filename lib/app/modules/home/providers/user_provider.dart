@@ -10,6 +10,8 @@ class UserProvider extends GetConnect {
     //   set headers with token
     httpClient.addRequestModifier<Object?>((request) {
       request.headers['Authorization'] = 'Bearer ${box.read('token')}';
+      request.headers['Accept'] = 'application/json';
+      request.headers['Content-Type'] = 'application/json';
       return request;
     });
   }

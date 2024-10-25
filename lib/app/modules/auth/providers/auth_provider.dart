@@ -1,11 +1,19 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/config.dart';
 
 class AuthProvider extends GetConnect {
   @override
   void onInit() {
+    GetStorage box = GetStorage();
     httpClient.baseUrl = Config.BACKEND_API_URL;
+    httpClient.addRequestModifier<Object?>((request) {
+      request.headers['Authorization'] = 'Bearer ${box.read('token')}';
+      request.headers['Accept'] = 'application/json';
+      request.headers['Content-Type'] = 'application/json';
+      return request;
+    });
   }
 
   Future<Response> signInWithGoogle(GoogleSignInAccount auth) async {
@@ -34,6 +42,11 @@ class AuthProvider extends GetConnect {
       'c_password': c_password,
       'name': name
     });
+    return res;
+  }
+
+  Future<Response> logout() async {
+    final res = await post('/api/v1/auth/logout', {});
     return res;
   }
 

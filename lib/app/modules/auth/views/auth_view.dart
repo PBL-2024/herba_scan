@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
-
+import 'package:herba_scan/app/data/widgets/reusable_button.dart';
+import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {
@@ -18,16 +18,9 @@ class AuthView extends GetView<AuthController> {
         child: Center(
           child: Column(
             children: [
-              const SizedBox(
-                height: 100,
-              ),
-              Image.asset(
-                'assets/images/logo-tulisan.png',
-                width: 200,
-              ),
-              const SizedBox(
-                height: 50,
-              ),
+              const SizedBox(height: 100),
+              Image.asset('assets/images/logo-tulisan.png', width: 200),
+              const SizedBox(height: 50),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
@@ -35,7 +28,7 @@ class AuthView extends GetView<AuthController> {
                 ),
                 padding: const EdgeInsets.all(10),
                 child: Obx(
-                  () => Wrap(
+                      () => Wrap(
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -55,9 +48,7 @@ class AuthView extends GetView<AuthController> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 20,
-                      ),
+                      const SizedBox(width: 20),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: controller.isLogin.value
@@ -72,7 +63,6 @@ class AuthView extends GetView<AuthController> {
                                 ? Colors.black
                                 : Colors.white,
                             fontWeight: FontWeight.bold,
-                            // fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
                         ),
                       ),
@@ -85,161 +75,72 @@ class AuthView extends GetView<AuthController> {
                 child: Form(
                   key: controller.formKey,
                   child: Obx(
-                    () => Column(
+                        () => Column(
                       children: [
                         if (!controller.isLogin.value)
-                          ListTile(
-                            title: Text(
-                              'Masukkan Nama',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.all(0),
-                            subtitle: TextFormField(
-                              controller: controller.nameController,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return "Masukkan nama yang valid";
-                                }
-                                return null;
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              keyboardType: TextInputType.text,
-                              onEditingComplete: () =>
-                                  FocusScope.of(context).nextFocus(),
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ListTile(
-                          title: Text(
-                            'Masukkan E-mail',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.all(0),
-                          subtitle: TextFormField(
-                            controller: controller.emailController,
+                          ReusableInputField(
+                            title: 'Masukkan Nama',
+                            controller: controller.nameController,
                             validator: (val) {
-                              final regex = RegExp(
-                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                              );
-                              if (val == null || !regex.hasMatch(val)) {
-                                return "Masukkan email yang valid";
+                              if (val!.isEmpty) {
+                                return "Masukkan nama yang valid";
                               }
                               return null;
                             },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            keyboardType: TextInputType.emailAddress,
-                            onEditingComplete: () =>
-                                FocusScope.of(context).nextFocus(),
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                              ),
-                            ),
+                            keyboardType: TextInputType.text,
                           ),
+                        ReusableInputField(
+                          title: 'Masukkan E-mail',
+                          controller: controller.emailController,
+                          validator: (val) {
+                            final regex = RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                            );
+                            if (val == null || !regex.hasMatch(val)) {
+                              return "Masukkan email yang valid";
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                        ListTile(
-                          title: Text(
-                            'Masukkan Kata Sandi',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.all(0),
-                          subtitle: TextFormField(
-                            controller: controller.passwordController,
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: !controller.showPassword.value,
-                            validator: (val) => val!.isEmpty
-                                ? "Masukkan kata sandi yang valid"
-                                : null,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            decoration: InputDecoration(
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: IconButton(
-                                  onPressed: () => controller.togglePassword(),
-                                  icon: Icon(
-                                    controller.showPassword.value
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                  ),
-                                ),
-                              ),
-                              suffixStyle: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                              ),
+                        ReusableInputField(
+                          title: 'Masukkan Kata Sandi',
+                          controller: controller.passwordController,
+                          validator: (val) => val!.isEmpty
+                              ? "Masukkan kata sandi yang valid"
+                              : null,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: !controller.showPassword.value,
+                          suffixIcon: IconButton(
+                            onPressed: () => controller.togglePassword(),
+                            icon: Icon(
+                              controller.showPassword.value
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
                             ),
                           ),
                         ),
                         if (!controller.isLogin.value)
-                          ListTile(
-                            title: Text(
-                              'Konfirmasi Kata Sandi',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                              ),
-                            ),
-                            contentPadding: const EdgeInsets.all(0),
-                            subtitle: TextFormField(
-                              controller: controller.cPasswordController,
-                              keyboardType: TextInputType.visiblePassword,
-                              obscureText: !controller.showPassword.value,
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return "Masukkan kata sandi yang valid";
-                                } else if (val !=
-                                    controller.passwordController.text) {
-                                  return "Kata sandi tidak sama";
-                                }
-                                return null;
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              decoration: InputDecoration(
-                                suffixIcon: Padding(
-                                  padding: const EdgeInsets.only(right: 15),
-                                  child: IconButton(
-                                    onPressed: () =>
-                                        controller.togglePassword(),
-                                    icon: Icon(
-                                      controller.showPassword.value
-                                          ? Icons.visibility_outlined
-                                          : Icons.visibility_off_outlined,
-                                    ),
-                                  ),
-                                ),
-                                suffixStyle: const TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(30),
-                                  ),
-                                ),
+                          ReusableInputField(
+                            title: 'Konfirmasi Kata Sandi',
+                            controller: controller.cPasswordController,
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return "Masukkan kata sandi yang valid";
+                              } else if (val !=
+                                  controller.passwordController.text) {
+                                return "Kata sandi tidak sama";
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: !controller.showPassword.value,
+                            suffixIcon: IconButton(
+                              onPressed: () => controller.togglePassword(),
+                              icon: Icon(
+                                controller.showPassword.value
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
                               ),
                             ),
                           ),
@@ -257,48 +158,24 @@ class AuthView extends GetView<AuthController> {
                               ),
                             ),
                           ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Themes.buttonColor,
-                              fixedSize: const Size(double.infinity, 50),
-                            ),
-                            onPressed: () {
-                              if (controller.formKey.currentState!.validate()) {
-                                controller.isLogin.value
-                                    ? controller.signIn()
-                                    : controller.signUp();
-                              }
-                            },
-                            child: controller.isLoading.value
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white)
-                                : Text(
-                                    textAlign: TextAlign.center,
-                                    controller.isLogin.value
-                                        ? 'Masuk'
-                                        : 'Daftar',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily:
-                                          GoogleFonts.poppins().fontFamily,
-                                    ),
-                                  ),
-                          ),
+                        const SizedBox(height: 20),
+                        ReusableButton(
+                          text: controller.isLogin.value ? 'Masuk' : 'Daftar',
+                          onPressed: () {
+                            if (controller.formKey.currentState!.validate()) {
+                              controller.isLogin.value
+                                  ? controller.signIn()
+                                  : controller.signUp();
+                            }
+                          },
+                          isLoading: controller.isLoading.value,
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Row(
                 children: <Widget>[
                   Expanded(
@@ -314,8 +191,9 @@ class AuthView extends GetView<AuthController> {
                     child: Text(
                       "Atau",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: GoogleFonts.poppins().fontFamily),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -328,17 +206,13 @@ class AuthView extends GetView<AuthController> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: OutlinedButton.icon(
                   onPressed: () => controller.signInWithGoogle(),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(
-                      color: Colors.black,
-                    ),
+                    side: const BorderSide(color: Colors.black),
                     fixedSize: const Size(double.infinity, 50),
                   ),
                   label: SizedBox(
@@ -351,9 +225,7 @@ class AuthView extends GetView<AuthController> {
                             'assets/images/icons/google-icon.png',
                             width: 25,
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
+                          const SizedBox(width: 10),
                           Text(
                             'Masuk dengan akun Google',
                             style: TextStyle(

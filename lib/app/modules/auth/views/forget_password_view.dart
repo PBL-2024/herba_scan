@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/widgets/reusable_button.dart';
+import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
 
 class ForgetPasswordView extends GetView {
@@ -65,70 +67,35 @@ class ForgetPasswordView extends GetView {
                           children: [
                             Form(
                               key: formKey,
-                              child: ListTile(
-                                title: Text(
-                                  'Masukkan E-mail',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily:
-                                        GoogleFonts.poppins().fontFamily,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.all(0),
-                                subtitle: TextFormField(
-                                  controller: controller.emailController,
-                                  validator: (val) {
-                                    final regex = RegExp(
-                                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                                    );
-                                    if (val == null || !regex.hasMatch(val)) {
-                                      return "Masukkan email yang valid";
-                                    }
-                                    return null;
-                                  },
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  keyboardType: TextInputType.emailAddress,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(30),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              child: ReusableInputField(
+                                title: 'Masukkan E-mail',
+                                controller: controller.emailController,
+                                validator: (val) {
+                                  final regex = RegExp(
+                                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                  );
+                                  if (val == null || !regex.hasMatch(val)) {
+                                    return "Masukkan email yang valid";
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.emailAddress,
+                                obscureText: false,
+                                suffixIcon: null,
                               ),
                             ),
                             const SizedBox(
                               height: 20,
                             ),
                             Obx(
-                              () => SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Themes.buttonColor,
-                                    fixedSize: const Size(double.infinity, 50),
-                                  ),
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      controller.sendOtp();
-                                    }
-                                  },
-                                  child: controller.isLoading.value
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white)
-                                      : Text(
-                                          textAlign: TextAlign.center,
-                                          'Kirim kode',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: GoogleFonts.poppins()
-                                                .fontFamily,
-                                          ),
-                                        ),
-                                ),
+                              () => ReusableButton(
+                                text: 'Kirim kode',
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    controller.sendOtp();
+                                  }
+                                },
+                                isLoading: controller.isLoading.value,
                               ),
                             ),
                           ],
@@ -205,71 +172,36 @@ class InputOtpView extends GetView {
                           children: [
                             Form(
                               key: formKey,
-                              child: ListTile(
-                                title: Text(
-                                  'Kode OTP',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily:
-                                        GoogleFonts.poppins().fontFamily,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.all(0),
-                                subtitle: TextFormField(
-                                  controller: controller.otpController,
-                                  validator: (val) {
-                                    if (val!.isEmpty) {
-                                      return "Masukkan kode OTP";
-                                    } else if (val.length < 6) {
-                                      return "Kode OTP minimal 6 karakter";
-                                    } else if (val.length > 6) {
-                                      return "Kode OTP maksimal 6 karakter";
-                                    }
-                                    return null;
-                                  },
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(30),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              child: ReusableInputField(
+                                title: 'Kode OTP',
+                                controller: controller.otpController,
+                                validator: (val) {
+                                  if (val!.isEmpty) {
+                                    return "Masukkan kode OTP";
+                                  } else if (val.length < 6) {
+                                    return "Kode OTP minimal 6 karakter";
+                                  } else if (val.length > 6) {
+                                    return "Kode OTP maksimal 6 karakter";
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.number,
+                                obscureText: false,
+                                suffixIcon: null,
                               ),
                             ),
                             const SizedBox(
                               height: 20,
                             ),
                             Obx(
-                              () => SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Themes.buttonColor,
-                                    fixedSize: const Size(double.infinity, 50),
-                                  ),
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      controller.verifyOtp();
-                                    }
-                                  },
-                                  child: controller.isLoading.value
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white)
-                                      : Text(
-                                          textAlign: TextAlign.center,
-                                          'Lanjut',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: GoogleFonts.poppins()
-                                                .fontFamily,
-                                          ),
-                                        ),
-                                ),
+                              () => ReusableButton(
+                                text: 'Lanjut',
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    controller.verifyOtp();
+                                  }
+                                },
+                                isLoading: controller.isLoading.value,
                               ),
                             ),
                           ],
@@ -336,71 +268,37 @@ class NewPasswordView extends GetView {
                               key: formKey,
                               child: Column(
                                 children: [
-                                  ListTile(
-                                    title: Text(
-                                      'Kata Sandi Baru',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily:
-                                            GoogleFonts.poppins().fontFamily,
-                                      ),
-                                    ),
-                                    contentPadding: const EdgeInsets.all(0),
-                                    subtitle: TextFormField(
-                                      controller: controller.newPassword,
-                                      validator: (val) {
-                                        if (val!.isEmpty) {
-                                          return "Masukkan kata sandi baru";
-                                        }
-                                        return null;
-                                      },
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      keyboardType: TextInputType.text,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(30),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                  ReusableInputField(
+                                    title: 'Kata Sandi Baru',
+                                    controller: controller.newPassword,
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return "Masukkan kata sandi baru";
+                                      }
+                                      return null;
+                                    },
+                                    keyboardType: TextInputType.text,
+                                    obscureText: true,
+                                    suffixIcon: null,
                                   ),
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  ListTile(
-                                    title: Text(
-                                      'Konfirmasi Kata Sandi Baru',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily:
-                                            GoogleFonts.poppins().fontFamily,
-                                      ),
-                                    ),
-                                    contentPadding: const EdgeInsets.all(0),
-                                    subtitle: TextFormField(
-                                      controller: controller.cNewPassword,
-                                      validator: (val) {
-                                        if (val!.isEmpty) {
-                                          return "Masukkan konfirmasi kata sandi baru";
-                                        } else if (val !=
-                                            controller.newPassword.text) {
-                                          return "Kata sandi tidak sama";
-                                        }
-                                        return null;
-                                      },
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      keyboardType: TextInputType.text,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(30),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                  ReusableInputField(
+                                    title: 'Konfirmasi Kata Sandi Baru',
+                                    controller: controller.cNewPassword,
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return "Masukkan konfirmasi kata sandi baru";
+                                      } else if (val !=
+                                          controller.newPassword.text) {
+                                        return "Kata sandi tidak sama";
+                                      }
+                                      return null;
+                                    },
+                                    keyboardType: TextInputType.text,
+                                    obscureText: true,
+                                    suffixIcon: null,
                                   ),
                                   const SizedBox(
                                     height: 20,
@@ -409,32 +307,14 @@ class NewPasswordView extends GetView {
                               ),
                             ),
                             Obx(
-                              () => SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Themes.buttonColor,
-                                    fixedSize: const Size(double.infinity, 50),
-                                  ),
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      controller.changePassword();
-                                    }
-                                  },
-                                  child: controller.isLoading.value
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white)
-                                      : Text(
-                                          textAlign: TextAlign.center,
-                                          'Simpan',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: GoogleFonts.poppins()
-                                                .fontFamily,
-                                          ),
-                                        ),
-                                ),
+                              () => ReusableButton(
+                                text: 'Simpan',
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    controller.changePassword();
+                                  }
+                                },
+                                isLoading: controller.isLoading.value,
                               ),
                             ),
                           ],
