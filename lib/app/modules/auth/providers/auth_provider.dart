@@ -36,4 +36,26 @@ class AuthProvider extends GetConnect {
     });
     return res;
   }
+
+  Future<Response> sendOtp(String email) async {
+    final res = await post('/api/v1/auth/otp/send', {'email': email});
+    return res;
+  }
+
+  Future<Response> verfiyOtp(String email, String otp) async {
+    final res =
+        await post('/api/v1/auth/otp/verify', {'email': email, 'otp': otp});
+    return res;
+  }
+
+  Future<Response> changePassword(
+      String email, String token, String password, String c_password) async {
+    final res = await post('/api/v1/auth/change-password', {
+      'email': email,
+      'token': token,
+      'password': password,
+      'c_password': c_password
+    });
+    return res;
+  }
 }

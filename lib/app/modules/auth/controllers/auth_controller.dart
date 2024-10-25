@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/app/data/models/auth/auth_user.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
+import 'package:herba_scan/app/modules/auth/views/forget_password_view.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 
 class AuthController extends GetxController {
@@ -19,6 +20,8 @@ class AuthController extends GetxController {
   final TextEditingController otpController = TextEditingController();
 
   final isLogin = true.obs;
+  final isLoading = false.obs;
+
   final showPassword = false.obs;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -56,6 +59,7 @@ class AuthController extends GetxController {
 
   Future<void> signInWithGoogle() async {
     try {
+      isLoading.value = true;
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser != null) {
         final response = await _authProvider.signInWithGoogle(googleUser);
@@ -67,7 +71,9 @@ class AuthController extends GetxController {
           throw 'Permintaan Gagal';
         }
       }
+      isLoading.value = false;
     } catch (error) {
+      isLoading.value = false;
       Get.snackbar(
           'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
     }
@@ -114,6 +120,7 @@ class AuthController extends GetxController {
 
   Future<void> signIn() async {
     try {
+      isLoading.value = true;
       if (formKey.currentState!.validate()) {
         final res = await _authProvider.signIn(
           emailController.text,
@@ -128,7 +135,9 @@ class AuthController extends GetxController {
           throw 'Permintaan Gagal';
         }
       }
+      isLoading.value = false;
     } catch (e) {
+      isLoading.value = false;
       Get.snackbar(
           'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
     }
@@ -136,6 +145,7 @@ class AuthController extends GetxController {
 
   Future<void> signUp() async {
     try {
+      isLoading.value = true;
       if (formKey.currentState!.validate()) {
         final res = await _authProvider.signUp(
           emailController.text,
@@ -150,8 +160,55 @@ class AuthController extends GetxController {
           throw 'Permintaan Gagal';
         }
       }
+      isLoading.value = false;
     } catch (e) {
+      isLoading.value = false;
       Get.snackbar('Terjadi Kesalahan', 'Email sudah digunakan');
     }
+  }
+
+  Future<void> sendOtp() async {
+    isLoading.value = true;
+    final res = await _authProvider.sendOtp(emailController.text);
+
+    if (res.statusCode == 200) {
+      Get.snackbar('Berhasil', 'Kode OTP telah dikirim ke email anda');
+      Get.to(() => const InputOtpView(), transition: Transition.rightToLeft);
+    } else {
+      Get.snackbar('Terjadi Kesalahan', 'Email tidak ditemukan');
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> verifyOtp() async {
+    isLoading.value = true;
+    final res =
+        await _authProvider.verfiyOtp(emailController.text, otpController.text);
+
+    if (res.statusCode == 200) {
+      Get.snackbar('Berhasil', 'Kode OTP valid');
+      Get.to(() => NewPasswordView(), transition: Transition.rightToLeft);
+    } else {
+      Get.snackbar('Terjadi Kesalahan', 'Kode OTP salah');
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> changePassword() async {
+    isLoading.value = true;
+    final res = await _authProvider.changePassword(
+      emailController.text,
+      otpController.text,
+      newPassword.text,
+      cNewPassword.text,
+    );
+
+    if (res.statusCode == 200) {
+      Get.snackbar('Berhasil', 'Password berhasil diubah');
+      Get.offAllNamed('/auth');
+    } else {
+      Get.snackbar('Terjadi Kesalahan', 'Gagal mengubah password');
+    }
+    isLoading.value = false;
   }
 }

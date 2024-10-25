@@ -260,29 +260,35 @@ class AuthView extends GetView<AuthController> {
                         const SizedBox(
                           height: 20,
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Themes.buttonColor,
-                            fixedSize: const Size(double.infinity, 50),
-                          ),
-                          onPressed: () {
-                            if (controller.formKey.currentState!.validate()) {
-                              controller.isLogin.value
-                                  ? controller.signIn()
-                                  : controller.signUp();
-                            }
-                          },
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              textAlign: TextAlign.center,
-                              controller.isLogin.value ? 'Masuk' : 'Daftar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                              ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Themes.buttonColor,
+                              fixedSize: const Size(double.infinity, 50),
                             ),
+                            onPressed: () {
+                              if (controller.formKey.currentState!.validate()) {
+                                controller.isLogin.value
+                                    ? controller.signIn()
+                                    : controller.signUp();
+                              }
+                            },
+                            child: controller.isLoading.value
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white)
+                                : Text(
+                                    textAlign: TextAlign.center,
+                                    controller.isLogin.value
+                                        ? 'Masuk'
+                                        : 'Daftar',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily:
+                                          GoogleFonts.poppins().fontFamily,
+                                    ),
+                                  ),
                           ),
                         ),
                       ],

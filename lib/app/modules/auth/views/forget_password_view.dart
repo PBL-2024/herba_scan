@@ -102,28 +102,32 @@ class ForgetPasswordView extends GetView {
                             const SizedBox(
                               height: 20,
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Themes.buttonColor,
-                                fixedSize: const Size(double.infinity, 50),
-                              ),
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  Get.to(() => const InputOtpView(),
-                                      transition: Transition.rightToLeft);
-                                }
-                              },
-                              child: SizedBox(
+                            Obx(
+                              () => SizedBox(
                                 width: double.infinity,
-                                child: Text(
-                                  textAlign: TextAlign.center,
-                                  'Kirim kode',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily:
-                                        GoogleFonts.poppins().fontFamily,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Themes.buttonColor,
+                                    fixedSize: const Size(double.infinity, 50),
                                   ),
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      controller.sendOtp();
+                                    }
+                                  },
+                                  child: controller.isLoading.value
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white)
+                                      : Text(
+                                          textAlign: TextAlign.center,
+                                          'Kirim kode',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: GoogleFonts.poppins()
+                                                .fontFamily,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
@@ -239,28 +243,32 @@ class InputOtpView extends GetView {
                             const SizedBox(
                               height: 20,
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Themes.buttonColor,
-                                fixedSize: const Size(double.infinity, 50),
-                              ),
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  Get.to(() => const NewPasswordView(),
-                                      transition: Transition.rightToLeft);
-                                }
-                              },
-                              child: SizedBox(
+                            Obx(
+                              () => SizedBox(
                                 width: double.infinity,
-                                child: Text(
-                                  textAlign: TextAlign.center,
-                                  'Kirim kode',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily:
-                                        GoogleFonts.poppins().fontFamily,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Themes.buttonColor,
+                                    fixedSize: const Size(double.infinity, 50),
                                   ),
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      controller.verifyOtp();
+                                    }
+                                  },
+                                  child: controller.isLoading.value
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white)
+                                      : Text(
+                                          textAlign: TextAlign.center,
+                                          'Lanjut',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: GoogleFonts.poppins()
+                                                .fontFamily,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
@@ -400,25 +408,32 @@ class NewPasswordView extends GetView {
                                 ],
                               ),
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Themes.buttonColor,
-                                fixedSize: const Size(double.infinity, 50),
-                              ),
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {}
-                              },
-                              child: SizedBox(
+                            Obx(
+                              () => SizedBox(
                                 width: double.infinity,
-                                child: Text(
-                                  textAlign: TextAlign.center,
-                                  'Simpan',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily:
-                                        GoogleFonts.poppins().fontFamily,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Themes.buttonColor,
+                                    fixedSize: const Size(double.infinity, 50),
                                   ),
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      controller.changePassword();
+                                    }
+                                  },
+                                  child: controller.isLoading.value
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white)
+                                      : Text(
+                                          textAlign: TextAlign.center,
+                                          'Simpan',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: GoogleFonts.poppins()
+                                                .fontFamily,
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
