@@ -7,6 +7,7 @@ abstract class Routes {
   static const LEAF_SCAN = _Paths.LEAF_SCAN;
   static const AUTH = _Paths.AUTH;
   static const FORGET_PASSWORD = _Paths.FORGET_PASSWORD;
+  static const SETTING = _Paths.SETTING;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const LEAF_SCAN = '/leaf-scan';
   static const AUTH = '/auth';
   static const FORGET_PASSWORD = '/forget-password';
+  static const SETTING = '/setting';
 }

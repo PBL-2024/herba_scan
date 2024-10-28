@@ -6,14 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
-import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
+import 'package:herba_scan/app/modules/setting/controllers/setting_controller.dart';
 
-class ForgetPasswordView extends GetView {
-  const ForgetPasswordView({super.key});
+class ChangeEmailView extends GetView {
+  const ChangeEmailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AuthController());
+    final controller = Get.put(SettingController());
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
@@ -22,12 +22,11 @@ class ForgetPasswordView extends GetView {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            controller.emailController.clear();
             Get.back();
           },
         ),
         title: Text(
-          'Lupa Kata Sandi',
+          'Ubah E-mail',
           style: TextStyle(
               fontFamily: GoogleFonts.poppins().fontFamily,
               fontWeight: FontWeight.bold),
@@ -68,8 +67,8 @@ class ForgetPasswordView extends GetView {
                             Form(
                               key: formKey,
                               child: ReusableInputField(
-                                title: 'Masukkan E-mail',
-                                controller: controller.emailController,
+                                title: 'Masukkan E-mail lama',
+                                controller: TextEditingController(),
                                 validator: (val) {
                                   final regex = RegExp(
                                     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -87,16 +86,14 @@ class ForgetPasswordView extends GetView {
                             const SizedBox(
                               height: 20,
                             ),
-                            Obx(
-                              () => ReusableButton(
-                                text: 'Kirim kode',
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    controller.sendOtp();
-                                  }
-                                },
-                                isLoading: controller.isLoading.value,
-                              ),
+                            ReusableButton(
+                              text: 'Kirim kode',
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  Get.to(() => InputOtpView());
+                                }
+                              },
+                              isLoading: false,
                             ),
                           ],
                         ),
@@ -118,7 +115,7 @@ class InputOtpView extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AuthController>();
+    final controller = Get.find<SettingController>();
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
@@ -127,12 +124,12 @@ class InputOtpView extends GetView {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            controller.otpController.clear();
+            // controller.otpController.clear();
             Get.back();
           },
         ),
         title: Text(
-          'Lupa Kata Sandi',
+          'Ubah E-mail',
           style: TextStyle(
               fontFamily: GoogleFonts.poppins().fontFamily,
               fontWeight: FontWeight.bold),
@@ -174,7 +171,7 @@ class InputOtpView extends GetView {
                               key: formKey,
                               child: ReusableInputField(
                                 title: 'Kode OTP',
-                                controller: controller.otpController,
+                                controller: TextEditingController(),
                                 validator: (val) {
                                   if (val!.isEmpty) {
                                     return "Masukkan kode OTP";
@@ -193,16 +190,14 @@ class InputOtpView extends GetView {
                             const SizedBox(
                               height: 20,
                             ),
-                            Obx(
-                              () => ReusableButton(
-                                text: 'Lanjut',
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    controller.verifyOtp();
-                                  }
-                                },
-                                isLoading: controller.isLoading.value,
-                              ),
+                            ReusableButton(
+                              text: 'Lanjut',
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  Get.to(() => NewEmailView());
+                                }
+                              },
+                              isLoading: false,
                             ),
                           ],
                         ),
@@ -219,12 +214,12 @@ class InputOtpView extends GetView {
   }
 }
 
-class NewPasswordView extends GetView {
-  const NewPasswordView({super.key});
+class NewEmailView extends GetView {
+  const NewEmailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AuthController>();
+    final controller = Get.find<SettingController>();
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
@@ -233,13 +228,13 @@ class NewPasswordView extends GetView {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            controller.newPassword.clear();
-            controller.cNewPassword.clear();
+            // controller.newPassword.clear();
+            // controller.cNewPassword.clear();
             Get.back();
           },
         ),
         title: Text(
-          'Lupa Kata Sandi',
+          'Ubah E-mail',
           style: TextStyle(
               fontFamily: GoogleFonts.poppins().fontFamily,
               fontWeight: FontWeight.bold),
@@ -269,35 +264,18 @@ class NewPasswordView extends GetView {
                               child: Column(
                                 children: [
                                   ReusableInputField(
-                                    title: 'Kata Sandi Baru',
-                                    controller: controller.newPassword,
+                                    title: 'Masukkan E-mail Baru',
+                                    controller: TextEditingController(),
                                     validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return "Masukkan kata sandi baru";
+                                      final regex = RegExp(
+                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                      );
+                                      if (val == null || !regex.hasMatch(val)) {
+                                        return "Masukkan email yang valid";
                                       }
                                       return null;
                                     },
-                                    keyboardType: TextInputType.text,
-                                    obscureText: true,
-                                    suffixIcon: null,
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  ReusableInputField(
-                                    title: 'Konfirmasi Kata Sandi Baru',
-                                    controller: controller.cNewPassword,
-                                    validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return "Masukkan konfirmasi kata sandi baru";
-                                      } else if (val !=
-                                          controller.newPassword.text) {
-                                        return "Kata sandi tidak sama";
-                                      }
-                                      return null;
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    obscureText: true,
+                                    keyboardType: TextInputType.emailAddress,
                                     suffixIcon: null,
                                   ),
                                   const SizedBox(
@@ -306,16 +284,15 @@ class NewPasswordView extends GetView {
                                 ],
                               ),
                             ),
-                            Obx(
-                              () => ReusableButton(
-                                text: 'Simpan',
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    controller.changePassword();
-                                  }
-                                },
-                                isLoading: controller.isLoading.value,
-                              ),
+                            ReusableButton(
+                              text: 'Simpan',
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  // controller.changePassword();
+                                  Get.toNamed('/setting');
+                                }
+                              },
+                              isLoading: false,
                             ),
                           ],
                         ),
