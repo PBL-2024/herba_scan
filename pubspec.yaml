@@ -36,6 +36,8 @@ dependencies:
   camera: ^0.11.0+2
   image_picker: ^1.1.2
   google_sign_in: ^6.2.1
+  google_fonts: ^6.2.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -75,7 +77,10 @@ flutter:
    - images/mental_health.jpeg
    - images/makanan_mood.jpg
    - images/kebiasaan_pagi.jpg
+   - assets/images/
+   - assets/images/icons/
   
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

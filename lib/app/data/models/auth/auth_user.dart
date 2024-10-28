@@ -1,25 +1,25 @@
 // To parse this JSON data, do
 //
-//     final googleAuth = googleAuthFromJson(jsonString);
+//     final Auth = AuthFromJson(jsonString);
 
 import 'dart:convert';
 
-GoogleAuth googleAuthFromJson(String str) => GoogleAuth.fromJson(json.decode(str));
+Auth AuthFromJson(String str) => Auth.fromJson(json.decode(str));
 
-String googleAuthToJson(GoogleAuth data) => json.encode(data.toJson());
+String AuthToJson(Auth data) => json.encode(data.toJson());
 
-class GoogleAuth {
+class Auth {
   final bool success;
   final Data data;
   final String message;
 
-  GoogleAuth({
+  Auth({
     required this.success,
     required this.data,
     required this.message,
   });
 
-  factory GoogleAuth.fromJson(Map<String, dynamic> json) => GoogleAuth(
+  factory Auth.fromJson(Map<String, dynamic> json) => Auth(
     success: json["success"],
     data: Data.fromJson(json["data"]),
     message: json["message"],
