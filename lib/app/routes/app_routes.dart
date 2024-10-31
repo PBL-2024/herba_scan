@@ -16,6 +16,5 @@ abstract class _Paths {
   static const LEAF_SCAN = '/leaf-scan';
   static const AUTH = '/auth';
   static const ARTICLE = '/article';
-  static const FORGET_PASSWORD = '/forget_password';
-
+  static const FORGET_PASSWORD = '/forget-password';
 }

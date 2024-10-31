@@ -61,12 +61,15 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
     - assets/images/icons/
 =======
+=======
+>>>>>>> c2424b1ced270a853819e903c76045cd6e261b95
   
   assets:
    - images/kemangi.jpg
@@ -84,9 +87,15 @@ flutter:
    - images/mental_health.jpeg
    - images/makanan_mood.jpg
    - images/kebiasaan_pagi.jpg
+   - assets/images/
+   - assets/images/icons/
   
 
+<<<<<<< HEAD
 >>>>>>> 6-slicing-artikel-detail-artikel
+=======
+
+>>>>>>> c2424b1ced270a853819e903c76045cd6e261b95
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

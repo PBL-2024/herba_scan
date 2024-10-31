@@ -30,5 +30,18 @@ class AppPages {
       page: () => const AuthView(),
       binding: AuthBinding(),
     ),
+<<<<<<< HEAD
+=======
+    GetPage(
+      name: Routes.ARTICLE,
+      page: () => const ArticleView(),
+      binding: ArticleBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGET_PASSWORD,
+      page: () => const ForgetPasswordView(),
+      binding: AuthBinding(),
+    ),
+>>>>>>> c2424b1ced270a853819e903c76045cd6e261b95
   ];
 }
