@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:herba_scan/app/data/faq_item.dart';
 import 'package:herba_scan/app/modules/setting/providers/faq_provider.dart';
 
-import '../../../data/models/faq.dart';
+import '../../../data/models/response_faq.dart';
 
 class FaqController extends GetxController {
   final RxList<FAQItem> faqItems = <FAQItem>[].obs;

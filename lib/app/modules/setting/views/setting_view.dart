@@ -16,6 +16,7 @@ class SettingView extends GetView<SettingController> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SettingController());
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
@@ -47,35 +48,75 @@ class SettingView extends GetView<SettingController> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   elevation: 0,
-                  child: ListTile(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    leading: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey.shade400,
-                          width: 1,
+                  child: Obx(
+                    () => ListTile(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      leading: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade400,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
                         ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(100),
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey[200],
+                          child: GetX<SettingController>(
+                            builder: (controller) {
+                              final imageUrl =
+                                  controller.user.value.data?.imageUrl;
+
+                              if (imageUrl == null || imageUrl.isEmpty) {
+                                return const Icon(
+                                  Icons.person_outlined,
+                                  size: 40,
+                                  color: Colors.grey,
+                                );
+                              }
+
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover,
+                                  width: 40,
+                                  height: 40,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.person_outlined,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    );
+                                  },
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                      child: Icon(
-                        Icons.person_outlined,
-                        size: 40,
+                      title: AutoSizeText(
+                        controller.user.value.data?.name ?? 'Loading...',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    title: AutoSizeText(
-                      'Ridho Aulia\' Rahman',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: AutoSizeText(
-                      'edoaurahman@example.com',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade600),
+                      subtitle: AutoSizeText(
+                        controller.user.value.data?.email ?? 'Loading...',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade600),
+                      ),
                     ),
                   ),
                 ),
@@ -326,7 +367,7 @@ class SettingView extends GetView<SettingController> {
                               ),
                               trailing: Icon(Icons.arrow_forward_ios),
                               onTap: () {
-                                // Get.toNamed('/profile');
+                                controller.logout();
                               },
                             ),
                           ],

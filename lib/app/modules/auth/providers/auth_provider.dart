@@ -14,6 +14,7 @@ class AuthProvider extends GetConnect {
       request.headers['Content-Type'] = 'application/json';
       return request;
     });
+    httpClient.timeout = Duration(seconds: 30);
   }
 
   Future<Response> signInWithGoogle(GoogleSignInAccount auth) async {

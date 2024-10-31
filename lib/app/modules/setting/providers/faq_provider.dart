@@ -5,6 +5,7 @@ class FaqProvider extends GetConnect {
   @override
   void onInit() {
     httpClient.baseUrl = Config.BACKEND_API_URL;
+    httpClient.timeout = const Duration(seconds: 30);
   }
 
   Future<Response> getFaqs() => get('/api/v1/faq');

@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^6.2.1
   auto_size_text: ^3.0.0
   flutter_widget_from_html: ^0.15.2
+  flutter_image_compress: ^2.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
