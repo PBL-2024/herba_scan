@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
-import 'package:herba_scan/app/data/faq_item.dart';
 import 'package:herba_scan/app/data/widgets/custom_expansion.dart';
 import 'package:herba_scan/app/modules/setting/controllers/faq_controller.dart';
 
