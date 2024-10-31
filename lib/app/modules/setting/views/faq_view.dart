@@ -5,36 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/faq_item.dart';
 import 'package:herba_scan/app/data/widgets/custom_expansion.dart';
+import 'package:herba_scan/app/modules/setting/controllers/faq_controller.dart';
 
-class FaqView extends GetView {
-  FaqView({super.key});
-
-  final List<FAQItem> faqItems = [
-    FAQItem(
-      title: 'Penggunaan',
-      content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt '
-          'ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco '
-          'laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate '
-          'velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, '
-          'sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    ),
-    FAQItem(
-      title: 'Penggunaan',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
-    ),
-    FAQItem(
-      title: 'Penggunaan',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
-    ),
-    FAQItem(
-      title: 'Penggunaan',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...',
-    ),
-  ];
+class FaqView extends GetView<FaqController> {
+  const FaqView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(FaqController());
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
@@ -78,25 +56,32 @@ class FaqView extends GetView {
                     const SizedBox(
                       height: 20,
                     ),
-                    Card(
-                      elevation: 0,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: faqItems.length,
-                          itemBuilder: (context, index) {
-                            return CustomExpansionTile(
-                              faqItem: faqItems[index],
-                              isLastItem: index == faqItems.length - 1,
-                            );
-                          },
+                    Obx(
+                      () => Card(
+                        elevation: 0,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
+                        child: controller.isLoading.value
+                            ? CircularProgressIndicator(
+                                color: Themes.buttonColor,
+                              )
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: controller.faqItems.length,
+                                  itemBuilder: (context, index) {
+                                    return CustomExpansionTile(
+                                      faqItem: controller.faqItems[index],
+                                      isLastItem: index ==
+                                          controller.faqItems.length - 1,
+                                    );
+                                  },
+                                ),
+                              ),
                       ),
                     ),
                   ],

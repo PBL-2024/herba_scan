@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:herba_scan/app/data/faq_item.dart';
 
 class CustomExpansionTile extends StatefulWidget {
@@ -62,13 +63,8 @@ class _CustomExpansionTileState extends State<CustomExpansionTile> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: Text(
+                child: HtmlWidget(
                   widget.faqItem.content,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                    height: 1.5,
-                  ),
                 ),
               ),
             ],
