@@ -15,7 +15,8 @@ class UserProvider extends GetConnect {
     httpClient.timeout = Duration(seconds: 30);
   }
 
-  Future<Response> getUser() => get('/api/v1/user');
+  Future<Response> getUser() =>
+      get('/api/v1/user', headers: {'Accept': 'application/json'});
 
   Future<Response> updateUser(Map<String, dynamic> data) =>
       put('/api/v1/user', data);
@@ -27,4 +28,21 @@ class UserProvider extends GetConnect {
 
     return post('/api/v1/user/avatar', formData);
   }
+
+  Future<Response> changePassword(Map<String, dynamic> data) =>
+      put('/api/v1/user/change-password', data,
+          contentType: 'application/json');
+
+  Future<Response> postPlant(Map<String, dynamic> data) async {
+    final formData = FormData({
+      "nama": data['label'],
+      "file": MultipartFile(data['image'].path, filename: data['image'].name),
+    });
+    final response = await post('/api/v1/unclassified-plant', formData,
+        contentType: 'multipart/form-data');
+    return response;
+  }
+
+  Future<Response> getUnclassifiedPlants() =>
+      get('/api/v1/unclassified-plants', headers: {'Accept': 'application/json'});
 }

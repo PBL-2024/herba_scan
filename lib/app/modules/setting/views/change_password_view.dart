@@ -22,8 +22,6 @@ class ChangePasswordView extends GetView {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            // controller.newPassword.clear();
-            // controller.cNewPassword.clear();
             Get.back();
           },
         ),
@@ -59,13 +57,11 @@ class ChangePasswordView extends GetView {
                                 children: [
                                   ReusableInputField(
                                     title: 'Masukkan Kata Sandi Lama',
-                                    controller: TextEditingController(),
+                                    controller:
+                                        controller.oldPasswordController,
                                     validator: (val) {
-                                      final regex = RegExp(
-                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                                      );
-                                      if (val == null || !regex.hasMatch(val)) {
-                                        return "Masukkan email yang valid";
+                                      if (val!.isEmpty) {
+                                        return "Kata sandi lama tidak boleh kosong";
                                       }
                                       return null;
                                     },
@@ -75,13 +71,11 @@ class ChangePasswordView extends GetView {
                                   ),
                                   ReusableInputField(
                                     title: 'Masukkan Kata Sandi Baru',
-                                    controller: TextEditingController(),
+                                    controller:
+                                        controller.newPasswordController,
                                     validator: (val) {
-                                      final regex = RegExp(
-                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                                      );
-                                      if (val == null || !regex.hasMatch(val)) {
-                                        return "Masukkan email yang valid";
+                                      if (val!.isEmpty) {
+                                        return "Kata sandi lama tidak boleh kosong";
                                       }
                                       return null;
                                     },
@@ -95,29 +89,37 @@ class ChangePasswordView extends GetView {
                                 ],
                               ),
                             ),
-                            ReusableButton(
-                              text: 'Simpan',
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  // controller.changePassword();
-                                  Get.toNamed('/setting');
-                                }
-                              },
-                              isLoading: false,
-                            ),
-                            const SizedBox(height: 20),
-                            ReusableButton(
-                              text: 'Lupa Kata Sandi',
-                              textStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: GoogleFonts.poppins().fontFamily,
-                                  fontWeight: FontWeight.bold),
-                              buttonStyle: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey[400],
-                                fixedSize: const Size(double.infinity, 50),
+                            Obx(
+                              () => Column(
+                                children: [
+                                  ReusableButton(
+                                    text: 'Simpan',
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        controller.changePassword();
+                                      }
+                                    },
+                                    isLoading: controller.isLoading.value,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ReusableButton(
+                                    text: 'Lupa Kata Sandi',
+                                    textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily:
+                                            GoogleFonts.poppins().fontFamily,
+                                        fontWeight: FontWeight.bold),
+                                    buttonStyle: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey[400],
+                                      fixedSize:
+                                          const Size(double.infinity, 50),
+                                    ),
+                                    isLoading: controller.isLoading.value,
+                                    onPressed: () =>
+                                        Get.to(() => ForgetPasswordView()),
+                                  ),
+                                ],
                               ),
-                              onPressed: () =>
-                                  Get.to(() => ForgetPasswordView()),
                             ),
                           ],
                         ),
