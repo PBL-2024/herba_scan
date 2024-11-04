@@ -62,11 +62,28 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
+  
   assets:
-    - assets/images/
-    - assets/images/icons/
+   - images/kemangi.jpg
+   - images/imunitas.jpg
+   - images/teh_hijau.png
+   - images/Stres.png
+   - images/makanan_sehat.jpg
+   - images/olahraga.jpg
+   - images/yoga.jpg
+   - images/Tidur-Nyenyak.jpg
+   - images/meditasi.jpg
+   - images/diet.jpg
+   - images/insomnia.jpg
+   - images/hidup_sehat.jpg
+   - images/mental_health.jpeg
+   - images/makanan_mood.jpg
+   - images/kebiasaan_pagi.jpg
+   - assets/images/
+   - assets/images/icons/
+  
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
