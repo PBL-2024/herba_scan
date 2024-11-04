@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/modules/setting/bindings/setting_binding.dart';
 import 'package:herba_scan/app/modules/setting/views/change_password_view.dart';
 import 'package:herba_scan/app/modules/setting/views/faq_view.dart';
 import 'package:herba_scan/app/modules/setting/views/profile_view.dart';
@@ -16,7 +17,6 @@ class SettingView extends GetView<SettingController> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SettingController());
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
@@ -292,7 +292,8 @@ class SettingView extends GetView<SettingController> {
                               ),
                               trailing: Icon(Icons.arrow_forward_ios),
                               onTap: () {
-                                Get.to(() => UploadPlantView());
+                                Get.to(() => UploadPlantView(),
+                                    binding: SettingBinding());
                               },
                             ),
                             ListTile(
@@ -328,7 +329,7 @@ class SettingView extends GetView<SettingController> {
                               ),
                               trailing: Icon(Icons.arrow_forward_ios),
                               onTap: () {
-                                Get.to(() => FaqView());
+                                Get.to(() => FaqView(),binding: SettingBinding());
                               },
                             ),
                             ListTile(

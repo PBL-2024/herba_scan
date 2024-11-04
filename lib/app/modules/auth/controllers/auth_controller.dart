@@ -203,7 +203,6 @@ class AuthController extends GetxController {
         await _authProvider.verfiyOtp(emailController.text, otpController.text);
 
     if (res.statusCode == 200) {
-      Get.snackbar('Berhasil', 'Kode OTP valid');
       Get.to(() => NewPasswordView(), transition: Transition.rightToLeft);
     } else {
       Get.snackbar('Terjadi Kesalahan', 'Kode OTP salah');

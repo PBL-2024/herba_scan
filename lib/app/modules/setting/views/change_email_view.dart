@@ -6,14 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
+import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
+import 'package:herba_scan/app/modules/setting/bindings/setting_binding.dart';
 import 'package:herba_scan/app/modules/setting/controllers/setting_controller.dart';
 
-class ChangeEmailView extends GetView {
+class ChangeEmailView extends GetView<SettingController> {
   const ChangeEmailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SettingController());
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
@@ -68,7 +69,7 @@ class ChangeEmailView extends GetView {
                               key: formKey,
                               child: ReusableInputField(
                                 title: 'Masukkan E-mail lama',
-                                controller: TextEditingController(),
+                                controller: controller.emailController,
                                 validator: (val) {
                                   final regex = RegExp(
                                     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -86,14 +87,16 @@ class ChangeEmailView extends GetView {
                             const SizedBox(
                               height: 20,
                             ),
-                            ReusableButton(
-                              text: 'Kirim kode',
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  Get.to(() => InputOtpView());
-                                }
-                              },
-                              isLoading: false,
+                            Obx(
+                              () => ReusableButton(
+                                text: 'Kirim kode',
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    controller.sendOtp();
+                                  }
+                                },
+                                isLoading: controller.isLoading.value,
+                              ),
                             ),
                           ],
                         ),
@@ -110,12 +113,11 @@ class ChangeEmailView extends GetView {
   }
 }
 
-class InputOtpView extends GetView {
+class InputOtpView extends GetView<SettingController> {
   const InputOtpView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SettingController>();
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
@@ -171,7 +173,7 @@ class InputOtpView extends GetView {
                               key: formKey,
                               child: ReusableInputField(
                                 title: 'Kode OTP',
-                                controller: TextEditingController(),
+                                controller: controller.otpController,
                                 validator: (val) {
                                   if (val!.isEmpty) {
                                     return "Masukkan kode OTP";
@@ -192,9 +194,15 @@ class InputOtpView extends GetView {
                             ),
                             ReusableButton(
                               text: 'Lanjut',
-                              onPressed: () {
+                              onPressed: () async {
                                 if (formKey.currentState!.validate()) {
-                                  Get.to(() => NewEmailView());
+                                  final res = await controller.verifyOtp(
+                                      controller.emailController.text,
+                                      controller.otpController.text);
+                                  if (res) {
+                                    Get.to(() => NewEmailView(),
+                                        transition: Transition.rightToLeft);
+                                  }
                                 }
                               },
                               isLoading: false,
@@ -214,12 +222,11 @@ class InputOtpView extends GetView {
   }
 }
 
-class NewEmailView extends GetView {
+class NewEmailView extends GetView<SettingController> {
   const NewEmailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SettingController>();
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
@@ -228,8 +235,6 @@ class NewEmailView extends GetView {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () {
-            // controller.newPassword.clear();
-            // controller.cNewPassword.clear();
             Get.back();
           },
         ),
@@ -263,19 +268,53 @@ class NewEmailView extends GetView {
                               key: formKey,
                               child: Column(
                                 children: [
+                                  Obx(
+                                    () => ReusableInputField(
+                                      title: 'Masukkan E-mail Baru',
+                                      controller: controller.newEmailController,
+                                      validator: (val) {
+                                        final regex = RegExp(
+                                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                        );
+                                        if (val == null ||
+                                            !regex.hasMatch(val)) {
+                                          return "Masukkan email yang valid";
+                                        }
+                                        return null;
+                                      },
+                                      keyboardType: TextInputType.emailAddress,
+                                      suffixIcon: TextButton(
+                                        onPressed: () {
+                                          if (controller.countDown.value <= 0 && controller.newEmailController.text.isNotEmpty) {
+                                            controller.sendOtpToNewEmail();
+                                          }else{
+                                            formKey.currentState!.validate();
+                                          }
+                                        },
+                                        child: Text(controller.countDown.value >
+                                                0
+                                            ? "Kirim ulang (${controller.countDown.value})"
+                                                .toString()
+                                            : 'Kirim kode OTP'),
+                                      ),
+                                    ),
+                                  ),
                                   ReusableInputField(
-                                    title: 'Masukkan E-mail Baru',
-                                    controller: TextEditingController(),
+                                    title: 'Kode OTP',
+                                    controller:
+                                        controller.otpNewEmailController,
                                     validator: (val) {
-                                      final regex = RegExp(
-                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                                      );
-                                      if (val == null || !regex.hasMatch(val)) {
-                                        return "Masukkan email yang valid";
+                                      if (val!.isEmpty) {
+                                        return "Masukkan kode OTP";
+                                      } else if (val.length < 6) {
+                                        return "Kode OTP minimal 6 karakter";
+                                      } else if (val.length > 6) {
+                                        return "Kode OTP maksimal 6 karakter";
                                       }
                                       return null;
                                     },
-                                    keyboardType: TextInputType.emailAddress,
+                                    keyboardType: TextInputType.number,
+                                    obscureText: false,
                                     suffixIcon: null,
                                   ),
                                   const SizedBox(
@@ -284,15 +323,16 @@ class NewEmailView extends GetView {
                                 ],
                               ),
                             ),
-                            ReusableButton(
-                              text: 'Simpan',
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  // controller.changePassword();
-                                  Get.toNamed('/setting');
-                                }
-                              },
-                              isLoading: false,
+                            Obx(
+                              () => ReusableButton(
+                                text: 'Simpan',
+                                onPressed: () {
+                                  if (formKey.currentState!.validate()) {
+                                    controller.changeEmail();
+                                  }
+                                },
+                                isLoading: controller.isLoading.value,
+                              ),
                             ),
                           ],
                         ),

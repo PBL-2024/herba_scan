@@ -12,7 +12,6 @@ class UploadPlantView extends GetView<UploadPlantController> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(UploadPlantController());
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -48,6 +47,7 @@ class UploadPlantView extends GetView<UploadPlantController> {
           await Future.delayed(Duration(seconds: 1));
         },
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Center(
             child: GetX<UploadPlantController>(
               builder: (controller) {
@@ -59,14 +59,19 @@ class UploadPlantView extends GetView<UploadPlantController> {
                   return Column(
                     children: [
                       for (var plant in controller.listUnclassifiedPlant)
-                        LeafCard(
-                          imageUrl: plant.fileUrl,
-                          name: plant.nama,
-                          status: plant.isVerified == 1
-                              ? 'Terverifikasi'
-                              : 'Belum Terverifikasi',
-                          date: DateFormat('yyyy/MM/dd, HH:mm')
-                              .format(plant.createdAt!),
+                        InkWell(
+                          onLongPress: () {
+                            controller.deleteBottomSheet(plant.id!.toString());
+                          },
+                          child: LeafCard(
+                            imageUrl: plant.fileUrl,
+                            name: plant.nama,
+                            status: plant.isVerified == 1
+                                ? 'Terverifikasi'
+                                : 'Belum Terverifikasi',
+                            date: DateFormat('yyyy/MM/dd, HH:mm')
+                                .format(plant.createdAt!),
+                          ),
                         ),
                     ],
                   );

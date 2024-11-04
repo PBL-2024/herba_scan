@@ -14,6 +14,8 @@ class UploadPlantController extends GetxController {
 
   final listUnclassifiedPlant = <Plant>[].obs;
 
+  final _isProcessing = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -64,17 +66,19 @@ class UploadPlantController extends GetxController {
                     ListTile(
                       leading: Icon(Icons.camera_alt),
                       title: Text('Kamera'),
-                      onTap: () {
-                        Get.back();
+                      onTap: () async {
                         pickAndUploadImage(ImageSource.camera);
+                        await Future.delayed(Duration(seconds: 1));
+                        Get.back();
                       },
                     ),
                     ListTile(
                       leading: Icon(Icons.photo),
                       title: Text('Galeri'),
-                      onTap: () {
-                        Get.back();
+                      onTap: () async {
                         pickAndUploadImage(ImageSource.gallery);
+                        await Future.delayed(Duration(seconds: 1));
+                        Get.back();
                       },
                     ),
                   ],
@@ -176,11 +180,105 @@ class UploadPlantController extends GetxController {
     final userProvider = Get.put(UserProvider());
     final response = await userProvider.getUnclassifiedPlants();
     final res = UnclassifiedPlantResponse.fromJson(response.body);
-    if (res.data == null) {
+    if (res.data!.isEmpty) {
       isEmpty.value = true;
+      listUnclassifiedPlant.clear();
     } else {
       listUnclassifiedPlant.assignAll(res.data! as Iterable<Plant>);
       isEmpty.value = false;
     }
+  }
+
+  Future<void> deletePlant(String id) async {
+    final userProvider = Get.put(UserProvider());
+    final response = await userProvider.deleteUnclassifiedPlant(id);
+    if (response.statusCode == 200) {
+      Get.snackbar("Berhasil", "Data berhasil dihapus");
+    } else {
+      Get.snackbar("Gagal", "Data gagal dihapus");
+    }
+    getUnclassifiedPlant();
+  }
+
+  void deleteBottomSheet(String id) {
+    Get.bottomSheet(
+      BottomSheet(
+        onClosing: () {},
+        builder: (context) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            width: double.infinity,
+            child: Wrap(
+              children: [
+                Column(
+                  children: [
+                    //   Black line
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      width: 60,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text("Apakah anda yakin ingin menghapus data ini?"),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Obx(
+                            () => ReusableButton(
+                              isLoading: _isProcessing.value,
+                              text: 'Ya',
+                              buttonStyle: ButtonStyle(
+                                backgroundColor: WidgetStateProperty.all(
+                                  Colors.red,
+                                ),
+                                fixedSize: WidgetStateProperty.all(
+                                  Size(double.infinity, 50),
+                                ),
+                              ),
+                              onPressed: () async {
+                                _isProcessing.value = true;
+                                await Future.delayed(Duration(seconds: 1));
+                                _isProcessing.value = false;
+                                Get.back();
+                                deletePlant(id);
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ReusableButton(
+                            text: 'Tidak',
+                            onPressed: () {
+                              Get.back();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }

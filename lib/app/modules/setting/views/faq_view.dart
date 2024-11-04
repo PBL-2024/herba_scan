@@ -11,7 +11,6 @@ class FaqView extends GetView<FaqController> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(FaqController());
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(

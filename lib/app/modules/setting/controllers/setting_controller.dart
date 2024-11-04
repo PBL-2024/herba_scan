@@ -7,6 +7,8 @@ import 'package:herba_scan/app/data/models/response_user.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
+import 'package:herba_scan/app/modules/setting/bindings/setting_binding.dart';
+import 'package:herba_scan/app/modules/setting/views/change_email_view.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingController extends GetxController {
@@ -22,6 +24,13 @@ class SettingController extends GetxController {
   // Change Password
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
+
+  // Change Email
+  final otpController = TextEditingController();
+  final newEmailController = TextEditingController();
+  final otpNewEmailController = TextEditingController();
+  // count down timer
+  final countDown = 0.obs;
 
   @override
   void onInit() {
@@ -127,8 +136,7 @@ class SettingController extends GetxController {
         throw ('Anda tidak terautentikasi');
       }
     } catch (e) {
-      Get.snackbar(
-          'Terjadi Kesalahan', e.toString());
+      Get.snackbar('Terjadi Kesalahan', e.toString());
       Get.toNamed('/auth');
     }
   }
@@ -236,5 +244,97 @@ class SettingController extends GetxController {
     // clear text field
     oldPasswordController.clear();
     newPasswordController.clear();
+  }
+
+  Future<void> sendOtp() async {
+    isLoading.value = true;
+    final authProvider = Get.put(AuthProvider());
+    final userProvider = Get.put(UserProvider());
+
+    final responseUser = await userProvider.getUser();
+    final user = UserResponse.fromJson(responseUser.body);
+
+    if (emailController.text != user.data!.email) {
+      Get.snackbar('Terjadi Kesalahan', 'Email tidak sesuai');
+      isLoading.value = false;
+      return;
+    }
+
+    final res = await authProvider.sendOtp(emailController.text);
+
+    if (res.statusCode == 200) {
+      Get.snackbar('Berhasil', 'Kode OTP telah dikirim ke email anda');
+      Get.to(() => const InputOtpView(),
+          transition: Transition.rightToLeft, binding: SettingBinding());
+    } else {
+      Get.snackbar('Terjadi Kesalahan', 'Email tidak ditemukan');
+    }
+    isLoading.value = false;
+  }
+
+  Future<bool> verifyOtp(String email, String otp) async {
+    isLoading.value = true;
+    final authProvider = Get.put(AuthProvider());
+    final res =
+        await authProvider.verfiyOtp(email, otp);
+    if (res.statusCode == 200) {
+      isLoading.value = false;
+      return true;
+    } else {
+      Get.snackbar('Terjadi Kesalahan', 'Kode OTP salah');
+      isLoading.value = false;
+      return false;
+    }
+  }
+
+  Future<void> changeEmail() async {
+    isLoading.value = true;
+    // check if otp is valid
+    final isOtpValid = await verifyOtp(newEmailController.text, otpNewEmailController.text);
+    if (!isOtpValid) {
+      isLoading.value = false;
+      return;
+    }
+    final userProvider = Get.put(UserProvider());
+    final data = {
+      'email': newEmailController.text,
+    };
+    userProvider.updateUser(data).then((value) {
+      final userRes = UserResponse.fromJson(value.body);
+      if (value.statusCode == 200) {
+        Get.snackbar('Berhasil', 'Email berhasil diubah');
+        isLoading.value = false;
+        Get.offAllNamed('/setting');
+        getUser();
+      } else {
+        Get.snackbar('Gagal', userRes.message!);
+      }
+    });
+    isLoading.value = false;
+  }
+
+  void sendOtpToNewEmail() async {
+    if(countDown.value > 0) return;
+    isLoading.value = true;
+    setCountDown();
+    final userProvider = Get.put(UserProvider());
+    final data = {
+      'email': newEmailController.text,
+    };
+    final res = await userProvider.sendOtp(data);
+    if (res.statusCode == 200) {
+      Get.snackbar('Berhasil', 'Kode OTP telah dikirim ke email anda');
+    } else {
+      Get.snackbar('Terjadi Kesalahan', "Email sudah terdaftar");
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> setCountDown() async {
+    countDown.value = 15;
+    for (var i = 15; i >= 0; i--) {
+      await Future.delayed(Duration(seconds: 1));
+      countDown.value = i;
+    }
   }
 }

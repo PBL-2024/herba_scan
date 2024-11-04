@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
+import 'package:herba_scan/app/modules/setting/bindings/setting_binding.dart';
 import 'package:herba_scan/app/modules/setting/controllers/setting_controller.dart';
 import 'package:herba_scan/app/modules/setting/views/change_email_view.dart';
 
@@ -179,7 +180,7 @@ class ProfileView extends GetView<SettingController> {
                               onPressed: () {
                                 if (formKey.currentState!.validate() &&
                                     !controller.isLoading.value) {
-                                  Get.to(() => ChangeEmailView());
+                                  Get.to(() => ChangeEmailView(),binding: SettingBinding());
                                 }
                               },
                             ),

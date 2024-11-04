@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -21,7 +22,7 @@ class HomeView extends GetView<HomeController> {
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: () => Get.toNamed("/setting"),
+              onPressed: () => Get.toNamed(Routes.SETTING),
               child: Text("Setting"),
             ),
             ElevatedButton(
