@@ -6,12 +6,16 @@ class ReusableButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool isLoading;
+  final TextStyle? textStyle;
+  final ButtonStyle? buttonStyle;
 
   const ReusableButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.isLoading = false,
+    this.textStyle,
+    this.buttonStyle,
   });
 
   @override
@@ -19,7 +23,7 @@ class ReusableButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
+        style: buttonStyle ?? ElevatedButton.styleFrom(
           backgroundColor: Themes.buttonColor,
           fixedSize: const Size(double.infinity, 50),
         ),
@@ -27,14 +31,15 @@ class ReusableButton extends StatelessWidget {
         child: isLoading
             ? const CircularProgressIndicator(color: Colors.white)
             : Text(
-          textAlign: TextAlign.center,
-          text,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontFamily: GoogleFonts.poppins().fontFamily,
-          ),
-        ),
+                textAlign: TextAlign.center,
+                text,
+                style: textStyle ??
+                    TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                    ),
+              ),
       ),
     );
   }

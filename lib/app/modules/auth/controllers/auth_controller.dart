@@ -44,7 +44,7 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     //   prevent user to go back to login page
-    // checkTokenValid();
+    checkTokenValid();
   }
 
   @override
@@ -122,6 +122,7 @@ class AuthController extends GetxController {
   }
 
   void checkTokenValid() async {
+    if (box.hasData('token') && Get.currentRoute != '/auth') return;
     final _userProvider = Get.put(UserProvider());
     final res = await _userProvider.getUser();
     if (res.statusCode == 401) {
@@ -202,7 +203,6 @@ class AuthController extends GetxController {
         await _authProvider.verfiyOtp(emailController.text, otpController.text);
 
     if (res.statusCode == 200) {
-      Get.snackbar('Berhasil', 'Kode OTP valid');
       Get.to(() => NewPasswordView(), transition: Transition.rightToLeft);
     } else {
       Get.snackbar('Terjadi Kesalahan', 'Kode OTP salah');

@@ -8,6 +8,7 @@ class ReusableInputField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final Widget? suffixIcon;
+  final bool enabled;
 
   const ReusableInputField({
     super.key,
@@ -17,6 +18,7 @@ class ReusableInputField extends StatelessWidget {
     required this.keyboardType,
     this.obscureText = false,
     this.suffixIcon,
+    this.enabled = true,
   });
 
   @override
@@ -29,10 +31,13 @@ class ReusableInputField extends StatelessWidget {
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
       ),
+      enabled: enabled,
       contentPadding: const EdgeInsets.all(0),
       subtitle: TextFormField(
         controller: controller,
         validator: validator,
+        enabled: enabled,
+        onEditingComplete: () => FocusScope.of(context).nextFocus(),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: keyboardType,
         obscureText: obscureText,

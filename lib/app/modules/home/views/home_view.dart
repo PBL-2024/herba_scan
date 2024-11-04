@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
-import 'package:herba_scan/app/modules/leaf-scan/views/leaf_scan_view.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -19,9 +19,17 @@ class HomeView extends GetView<HomeController> {
         centerTitle: true,
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () => auth_controller.logout(),
-          child: Text("Keluar"),
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () => Get.toNamed(Routes.SETTING),
+              child: Text("Setting"),
+            ),
+            ElevatedButton(
+              onPressed: () => auth_controller.logout(),
+              child: Text("Keluar"),
+            ),
+          ],
         ),
       ),
     );

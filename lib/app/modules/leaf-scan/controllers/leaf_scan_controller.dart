@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:herba_scan/app/data/models/prediction.dart';
+import 'package:herba_scan/app/data/models/response_prediction.dart';
 import 'package:herba_scan/app/modules/leaf-scan/providers/predict_provider.dart';
 import 'package:image_picker/image_picker.dart';
 
