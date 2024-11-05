@@ -8,9 +8,6 @@ import '../modules/leaf-scan/bindings/leaf_scan_binding.dart';
 import '../modules/leaf-scan/views/leaf_scan_view.dart';
 import '../modules/setting/bindings/setting_binding.dart';
 import '../modules/setting/views/setting_view.dart';
-import '../modules/article/views/article_view.dart';
-import '../modules/article/bindings/article_binding.dart';
-
 part 'app_routes.dart';
 
 class AppPages {
@@ -36,6 +33,11 @@ class AppPages {
       name: _Paths.FORGET_PASSWORD,
       page: () => const ForgetPasswordView(),
       binding: AuthBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTING,
+      page: () => const SettingView(),
+      binding: SettingBinding(),
     ),
   ];
 }

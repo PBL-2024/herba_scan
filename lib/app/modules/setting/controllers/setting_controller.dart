@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/app/data/models/response_avatar_update.dart';
 import 'package:herba_scan/app/data/models/response_user.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
@@ -31,6 +32,9 @@ class SettingController extends GetxController {
   final otpNewEmailController = TextEditingController();
   // count down timer
   final countDown = 0.obs;
+
+  // Google sign in
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
   void onInit() {
@@ -105,6 +109,7 @@ class SettingController extends GetxController {
                               message);
                           if (response.statusCode == 200) {
                             box.remove('token');
+                            await _googleSignIn.signOut();
                             Get.offAllNamed('/home');
                           }
                         },
