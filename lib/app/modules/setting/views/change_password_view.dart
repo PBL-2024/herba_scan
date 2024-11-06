@@ -7,6 +7,7 @@ import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import 'package:herba_scan/app/modules/auth/views/forget_password_view.dart';
 import 'package:herba_scan/app/modules/setting/controllers/setting_controller.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 
 class ChangePasswordView extends GetView {
   const ChangePasswordView({super.key});
@@ -116,7 +117,7 @@ class ChangePasswordView extends GetView {
                                     ),
                                     isLoading: controller.isLoading.value,
                                     onPressed: () =>
-                                        Get.to(() => ForgetPasswordView()),
+                                        Get.toNamed(Routes.FORGET_PASSWORD),
                                   ),
                                 ],
                               ),
