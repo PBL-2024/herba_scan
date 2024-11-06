@@ -3,13 +3,12 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class ArticleController extends GetxController {
-  // Observable properties
   var articles = <Map<String, String>>[].obs;
   var isLoading = true.obs;
   var selectedImage = Rxn<File>();
   var articleTitle = ''.obs;
   var articleDescription = ''.obs;
-  var selectedFilter = 'terbaru'.obs;
+  var selectedFilter = ''.obs;
 
   final ImagePicker _picker = ImagePicker();
 

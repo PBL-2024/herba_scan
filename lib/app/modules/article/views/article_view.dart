@@ -43,7 +43,6 @@ class ArticleView extends GetView<ArticleController> {
                 ),
                 const SizedBox(height: 16.0),
                 
-                // Filter Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -54,7 +53,6 @@ class ArticleView extends GetView<ArticleController> {
                 ),
                 const SizedBox(height: 16.0),
 
-                // Article List
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
