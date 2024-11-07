@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:herba_scan/app/data/models/response_suggestion_plant_list.dart';
 import 'package:herba_scan/app/data/models/response_unclassified_plant.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
@@ -16,6 +17,8 @@ class UploadPlantController extends GetxController {
 
   final _isProcessing = false.obs;
 
+  final plantSuggestion = <String>[].obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -25,6 +28,7 @@ class UploadPlantController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    getPlantSuggestion();
   }
 
   @override
@@ -124,9 +128,10 @@ class UploadPlantController extends GetxController {
                   height: 20,
                 ),
                 ReusableInputField(
-                  title: 'Masukkan Nama Tanaman (Opsional)',
+                  title: 'Masukkan Nama Tanaman',
                   controller: labelController,
                   validator: (val) => null,
+                  suggestions: plantSuggestion,
                   keyboardType: TextInputType.text,
                 ),
                 const SizedBox(
@@ -280,5 +285,13 @@ class UploadPlantController extends GetxController {
         },
       ),
     );
+  }
+
+  void getPlantSuggestion() async {
+    final userProvider = Get.put(UserProvider());
+    final response = await userProvider.getPlantSuggestions();
+    print(response.bodyString);
+    final res = PlantSuggestionListResponse.fromJson(response.body);
+    plantSuggestion.assignAll(res.data!);
   }
 }
