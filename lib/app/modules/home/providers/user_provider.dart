@@ -43,12 +43,16 @@ class UserProvider extends GetConnect {
     return response;
   }
 
-  Future<Response> getUnclassifiedPlants() =>
-      get('/api/v1/unclassified-plants', headers: {'Accept': 'application/json'});
+  Future<Response> getUnclassifiedPlants() => get('/api/v1/unclassified-plants',
+      headers: {'Accept': 'application/json'});
 
   Future<Response> deleteUnclassifiedPlant(String id) =>
       delete('/api/v1/unclassified-plant/$id');
 
   Future<Response> sendOtp(Map<String, dynamic> data) =>
       post('/api/v1/user/otp/send', data, contentType: 'application/json');
+
+  Future<Response> getPlantSuggestions() =>
+      get('/api/v1/unclassified-plant/list',
+          headers: {'Accept': 'application/json'});
 }
