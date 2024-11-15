@@ -81,8 +81,11 @@ class UploadPlantView extends GetView<UploadPlantController> {
                             status: plant.isVerified == 1
                                 ? 'Terverifikasi'
                                 : 'Belum Terverifikasi',
-                            date: DateFormat('yyyy/MM/dd, HH:mm')
-                                .format(plant.createdAt!),
+                            date: DateFormat('yyyy/MM/dd, HH:mm').format(
+                              plant.createdAt!.add(
+                                Duration(hours: 7),
+                              ),
+                            ),
                           ),
                         ),
                     ],

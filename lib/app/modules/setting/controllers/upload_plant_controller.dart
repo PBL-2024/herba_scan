@@ -98,6 +98,7 @@ class UploadPlantController extends GetxController {
 
   Future<String> setLabel() async {
     Completer<String> completer = Completer<String>();
+    final formKey = GlobalKey<FormState>();
     Get.bottomSheet(
       BottomSheet(
         onClosing: () {},
@@ -128,12 +129,20 @@ class UploadPlantController extends GetxController {
                 const SizedBox(
                   height: 20,
                 ),
-                ReusableInputField(
-                  title: 'Masukkan Nama Tanaman',
-                  controller: labelController,
-                  validator: (val) => null,
-                  suggestions: plantSuggestion,
-                  keyboardType: TextInputType.text,
+                Form(
+                  key: formKey,
+                  child: ReusableInputField(
+                    title: 'Masukkan Nama Tanaman',
+                    controller: labelController,
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Nama tanaman tidak boleh kosong';
+                      }
+                      return null;
+                    },
+                    suggestions: plantSuggestion,
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -141,6 +150,7 @@ class UploadPlantController extends GetxController {
                 ReusableButton(
                   text: 'Simpan',
                   onPressed: () {
+                    if (!formKey.currentState!.validate()) return;
                     completer.complete(labelController.text);
                     Get.back();
                   },
@@ -166,7 +176,7 @@ class UploadPlantController extends GetxController {
         'label': label,
         'image': image,
       };
-      print(data);
+      isLoading.value = true;
       final response = await userProvider.postPlant(data);
       if (response.statusCode == 200) {
         Get.snackbar("Berhasil", "Data berhasil diupload");
@@ -194,6 +204,7 @@ class UploadPlantController extends GetxController {
     }
     await Future.delayed(Duration(seconds: 1));
     isLoading.value = false;
+    getPlantSuggestion();
   }
 
   Future<void> deletePlant(String id) async {
