@@ -58,6 +58,9 @@ class ReusableInputField extends StatelessWidget {
                   validator: validator,
                   enabled: enabled,
                   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                  onChanged: (String value) {
+                    controller.text = value;
+                  },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: keyboardType,
                   obscureText: obscureText,
