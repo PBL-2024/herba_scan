@@ -10,12 +10,13 @@ import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadPlantController extends GetxController {
-  final isEmpty = false.obs;
   final labelController = TextEditingController();
 
   final listUnclassifiedPlant = <Plant>[].obs;
 
   final _isProcessing = false.obs;
+
+  final isLoading = false.obs;
 
   final plantSuggestion = <String>[].obs;
 
@@ -182,16 +183,17 @@ class UploadPlantController extends GetxController {
   }
 
   void getUnclassifiedPlant() async {
+    isLoading.value = true;
     final userProvider = Get.put(UserProvider());
     final response = await userProvider.getUnclassifiedPlants();
     final res = UnclassifiedPlantResponse.fromJson(response.body);
     if (res.data!.isEmpty) {
-      isEmpty.value = true;
       listUnclassifiedPlant.clear();
     } else {
       listUnclassifiedPlant.assignAll(res.data! as Iterable<Plant>);
-      isEmpty.value = false;
     }
+    await Future.delayed(Duration(seconds: 1));
+    isLoading.value = false;
   }
 
   Future<void> deletePlant(String id) async {

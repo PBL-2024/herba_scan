@@ -6,6 +6,7 @@ import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/widgets/leaf_card.dart';
 import 'package:herba_scan/app/modules/setting/controllers/upload_plant_controller.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class UploadPlantView extends GetView<UploadPlantController> {
   const UploadPlantView({super.key});
@@ -51,10 +52,21 @@ class UploadPlantView extends GetView<UploadPlantController> {
           child: Center(
             child: GetX<UploadPlantController>(
               builder: (controller) {
-                if (controller.listUnclassifiedPlant.isEmpty) {
-                  return controller.isEmpty.value
-                      ? emptyState()
-                      : CircularProgressIndicator();
+                if (controller.isLoading.value) {
+                  return Column(
+                    children: [
+                      Skeletonizer(
+                        enabled: controller.isLoading.value,
+                        child: LeafCard(
+                            imageUrl: '',
+                            name: 'Loading ...',
+                            status: 'Loading ...',
+                            date: 'Loading...'),
+                      )
+                    ],
+                  );
+                } else if (controller.listUnclassifiedPlant.isEmpty) {
+                  return emptyState();
                 } else {
                   return Column(
                     children: [

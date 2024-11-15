@@ -44,6 +44,12 @@ class _LeafCardState extends State<LeafCard> {
                   height: 280,
                   widget.imageUrl!,
                   fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/not-found.png',
+                      height: 280,
+                    );
+                  },
                 ),
               ),
 
