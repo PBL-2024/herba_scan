@@ -303,7 +303,6 @@ class UploadPlantController extends GetxController {
   void getPlantSuggestion() async {
     final userProvider = Get.put(UserProvider());
     final response = await userProvider.getPlantSuggestions();
-    print(response.bodyString);
     final res = PlantSuggestionListResponse.fromJson(response.body);
     plantSuggestion.assignAll(res.data!);
   }
