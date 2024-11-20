@@ -42,7 +42,7 @@ class ReusableInputField extends StatelessWidget {
                   return const Iterable<String>.empty();
                 }
                 return suggestions!.where((String option) {
-                  return option.contains(textEditingValue.text.toLowerCase());
+                  return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
                 });
               },
               onSelected: (String selection) {
