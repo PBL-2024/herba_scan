@@ -13,7 +13,9 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
     final auth_controller = Get.put(AuthController());
+    final String? id = Get.parameters['id'];
     return Scaffold(
+      key: UniqueKey(),
       appBar: AppBar(
         title: const Text('HomeView'),
         centerTitle: true,
@@ -21,6 +23,8 @@ class HomeView extends GetView<HomeController> {
       body: Center(
         child: Column(
           children: [
+            Text('HomeView is working'),
+            Text('Id from route is $id'),
             ElevatedButton(
               onPressed: () => Get.toNamed(Routes.SETTING),
               child: Text("Setting"),
