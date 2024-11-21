@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -73,6 +74,9 @@ class AuthController extends GetxController {
       }
       isLoading.value = false;
     } catch (error) {
+      if (kDebugMode) {
+        debugPrint(error.toString());
+      }
       isLoading.value = false;
       Get.snackbar(
           'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
