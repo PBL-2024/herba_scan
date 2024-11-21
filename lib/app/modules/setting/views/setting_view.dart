@@ -23,7 +23,11 @@ class SettingView extends GetView<SettingController> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Get.back();
+            if (Get.previousRoute.isEmpty) {
+              Get.offAllNamed('/home');
+            } else {
+              Get.back();
+            }
           },
         ),
         backgroundColor: Themes.backgroundColor,
@@ -329,7 +333,8 @@ class SettingView extends GetView<SettingController> {
                               ),
                               trailing: Icon(Icons.arrow_forward_ios),
                               onTap: () {
-                                Get.to(() => FaqView(),binding: SettingBinding());
+                                Get.to(() => FaqView(),
+                                    binding: SettingBinding());
                               },
                             ),
                             ListTile(
