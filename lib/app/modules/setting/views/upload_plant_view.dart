@@ -62,7 +62,23 @@ class UploadPlantView extends GetView<UploadPlantController> {
                             name: 'Loading ...',
                             status: 'Loading ...',
                             date: 'Loading...'),
-                      )
+                      ),
+                      Skeletonizer(
+                        enabled: controller.isLoading.value,
+                        child: LeafCard(
+                            imageUrl: '',
+                            name: 'Loading ...',
+                            status: 'Loading ...',
+                            date: 'Loading...'),
+                      ),
+                      Skeletonizer(
+                        enabled: controller.isLoading.value,
+                        child: LeafCard(
+                            imageUrl: '',
+                            name: 'Loading ...',
+                            status: 'Loading ...',
+                            date: 'Loading...'),
+                      ),
                     ],
                   );
                 } else if (controller.listUnclassifiedPlant.isEmpty) {

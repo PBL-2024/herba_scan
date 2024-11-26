@@ -21,19 +21,20 @@ class UploadPlantController extends GetxController {
   final plantSuggestion = <String>[].obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     getUnclassifiedPlant();
+    getPlantSuggestion();
   }
 
   @override
   void onReady() {
     super.onReady();
-    getPlantSuggestion();
   }
 
   @override
   void onClose() {
+    labelController.dispose();
     super.onClose();
   }
 
