@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:herba_scan/config.dart';
+import 'package:herba_scan/config.example.dart';
 
 class UserProvider extends GetConnect {
   @override

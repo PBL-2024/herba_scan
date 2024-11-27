@@ -15,7 +15,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => GetStorage().hasData('token') ? const HomeView() : const AuthView(),
+      page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(

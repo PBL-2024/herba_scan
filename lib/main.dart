@@ -15,3 +15,12 @@ void main() async {
     ),
   );
 }
+
+// coba frontend
+// import 'package:flutter/material.dart';
+// import 'package:herba_scan/app/homePage.dart';
+// import 'package:herba_scan/app/modules/home/views/home_view.dart';
+
+// void main() {
+//   runApp(const HomeView());
+// }
