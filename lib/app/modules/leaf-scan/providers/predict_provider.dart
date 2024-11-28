@@ -1,6 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
-import 'package:herba_scan/config.dart';
+import 'package:herba_scan/config.example.dart';
 
 class PredictProvider extends GetConnect {
   @override
