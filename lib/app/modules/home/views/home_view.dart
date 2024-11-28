@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:herba_scan/app/modules/home/views/favorite_view.dart';
 import 'package:herba_scan/app/modules/home/views/riwayat_view.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -18,7 +20,8 @@ class HomeView extends StatelessWidget {
             children: [
               // Header
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: Colors.green,
                   borderRadius: BorderRadius.circular(24),
@@ -28,10 +31,15 @@ class HomeView extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 24,
-                          backgroundColor: Colors.green.shade200,
-                          child: Icon(Icons.person, color: Colors.white),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(Routes.SETTING);
+                          },
+                          child: CircleAvatar(
+                            radius: 24,
+                            backgroundColor: Colors.green.shade200,
+                            child: Icon(Icons.person, color: Colors.white),
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Column(
@@ -56,13 +64,18 @@ class HomeView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.green.shade200,
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(Routes.LEAF_SCAN);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.green.shade200,
+                        ),
+                        child: const Icon(Icons.qr_code, color: Colors.white),
                       ),
-                      child: const Icon(Icons.qr_code, color: Colors.white),
                     ),
                   ],
                 ),
@@ -71,9 +84,10 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 24),
 
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Color(0x889ED957), 
+                  color: Color(0x889ED957),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Row(
@@ -82,15 +96,17 @@ class HomeView extends StatelessWidget {
                     const SizedBox(width: 20),
                     _buildTabButton("Beranda", true, context, null),
                     const SizedBox(width: 20),
-                    _buildTabButton("Riwayat", false, context, const RiwayatView()),
+                    _buildTabButton(
+                        "Riwayat", false, context, const RiwayatView()),
                     const SizedBox(width: 20),
-                    _buildTabButton("Favorit", false, context, const FavoriteView()),
+                    _buildTabButton(
+                        "Favorit", false, context, const FavoriteView()),
                     const SizedBox(width: 20),
                   ],
                 ),
               ),
               // Tab Bar
-              
+
               const SizedBox(height: 15),
 
               // Section: Tanaman
@@ -99,8 +115,10 @@ class HomeView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildPlantCard("Lidah Buaya", "assets/aloe_vera.png"),
-                  _buildPlantCard("Lidah Buaya", "assets/papaya_leaf.png"),
+                  _buildPlantCard(
+                      "Lidah Buaya", "assets/images/lidah-buaya.png"),
+                  _buildPlantCard(
+                      "Lidah Buaya", "assets/images/lidah-buaya.png"),
                 ],
               ),
               const SizedBox(height: 24),
@@ -108,9 +126,11 @@ class HomeView extends StatelessWidget {
               // Section: Artikel Kesehatan
               _buildSectionTitle("Artikel Kesehatan"),
               const SizedBox(height: 8),
-              _buildArticleCard("Daun Kemangi Bisa Buat Kaya...", "assets/basil_leaf.png"),
+              _buildArticleCard("Daun Kemangi Bisa Buat Kaya...",
+                  "assets/images/lidah-buaya.png"),
               const SizedBox(height: 8),
-              _buildArticleCard("Daun Kemangi Bisa Buat Kaya...", "assets/aloe_vera.png"),
+              _buildArticleCard("Daun Kemangi Bisa Buat Kaya...",
+                  "assets/images/lidah-buaya.png"),
             ],
           ),
         ),
@@ -162,9 +182,7 @@ class HomeView extends StatelessWidget {
           decoration: BoxDecoration(
             color: isActive ? Colors.green : Colors.white,
             borderRadius: BorderRadius.circular(24),
-            border: isActive
-                ? null
-                : Border.all(color: Colors.green),
+            border: isActive ? null : Border.all(color: Colors.green),
           ),
           child: Center(
             child: Text(
