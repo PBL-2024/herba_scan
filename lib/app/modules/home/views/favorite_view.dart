@@ -54,7 +54,7 @@ class FavoriteView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Riwayat"),
+        title: const Text("Favorite"),
         backgroundColor: Colors.green,
       ),
       body: Padding(
@@ -63,48 +63,48 @@ class FavoriteView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 24,
-                      backgroundColor: Colors.green.shade200,
-                      child: Icon(Icons.person, color: Colors.white),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Hai!",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          "Selamat pagi",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.green.shade200,
-                  ),
-                  child: const Icon(Icons.qr_code, color: Colors.white),
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Row(
+            //       children: [
+            //         CircleAvatar(
+            //           radius: 24,
+            //           backgroundColor: Colors.green.shade200,
+            //           child: Icon(Icons.person, color: Colors.white),
+            //         ),
+            //         const SizedBox(width: 8),
+            //         Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: const [
+            //             Text(
+            //               "Hai!",
+            //               style: TextStyle(
+            //                 fontSize: 16,
+            //                 fontWeight: FontWeight.bold,
+            //               ),
+            //             ),
+            //             Text(
+            //               "Selamat pagi",
+            //               style: TextStyle(
+            //                 fontSize: 14,
+            //                 color: Colors.grey,
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //     Container(
+            //       padding: const EdgeInsets.all(8),
+            //       decoration: BoxDecoration(
+            //         shape: BoxShape.circle,
+            //         color: Colors.green.shade200,
+            //       ),
+            //       child: const Icon(Icons.qr_code, color: Colors.white),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 24),
 
             // Tab Bar
@@ -112,8 +112,8 @@ class FavoriteView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildTabButton("Beranda", false, context, null),
-                _buildTabButton("Riwayat", true, context, null),
-                _buildTabButton("Favorit", false, context, null),
+                _buildTabButton("Riwayat", false, context, null),
+                _buildTabButton("Favorit", true, context, null),
               ],
             ),
             const SizedBox(height: 24),

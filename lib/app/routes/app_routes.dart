@@ -6,6 +6,7 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const LEAF_SCAN = _Paths.LEAF_SCAN;
   static const AUTH = _Paths.AUTH;
+  static const PLANT = _Paths.PLANT;
 }
 
 abstract class _Paths {
@@ -13,4 +14,5 @@ abstract class _Paths {
   static const HOME = '/home';
   static const LEAF_SCAN = '/leaf-scan';
   static const AUTH = '/auth';
+  static const PLANT = '/plant';
 }
