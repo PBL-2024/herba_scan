@@ -11,7 +11,7 @@ String responseErrorToJson(ResponseError data) => json.encode(data.toJson());
 class ResponseError {
   final bool success;
   final String message;
-  final Data data;
+  final Error data;
 
   ResponseError({
     required this.success,
@@ -22,7 +22,7 @@ class ResponseError {
   factory ResponseError.fromJson(Map<String, dynamic> json) => ResponseError(
     success: json["success"],
     message: json["message"],
-    data: Data.fromJson(json["data"]),
+    data: Error.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -32,14 +32,14 @@ class ResponseError {
   };
 }
 
-class Data {
+class Error {
   final String error;
 
-  Data({
+  Error({
     required this.error,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Error.fromJson(Map<String, dynamic> json) => Error(
     error: json["error"],
   );
 

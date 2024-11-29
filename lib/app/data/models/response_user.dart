@@ -11,7 +11,7 @@ String userResponseToJson(UserResponse data) => json.encode(data.toJson());
 
 class UserResponse {
   final bool? success;
-  final Data? data;
+  final User? data;
   final String? message;
 
   UserResponse({
@@ -22,7 +22,7 @@ class UserResponse {
 
   factory UserResponse.fromJson(Map<String, dynamic> json) => UserResponse(
         success: json["success"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null ? null : User.fromJson(json["data"]),
         message: json["message"],
       );
 
@@ -33,7 +33,7 @@ class UserResponse {
       };
 }
 
-class Data {
+class User {
   final int? id;
   final String? name;
   final String? email;
@@ -43,7 +43,7 @@ class Data {
   final dynamic googleId;
   final String? imageUrl;
 
-  Data({
+  User({
     this.id,
     this.name,
     this.email,
@@ -54,7 +54,7 @@ class Data {
     this.imageUrl,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         name: json["name"],
         email: json["email"],
