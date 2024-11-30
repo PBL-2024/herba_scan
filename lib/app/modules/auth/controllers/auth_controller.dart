@@ -48,16 +48,6 @@ class AuthController extends GetxController {
     checkTokenValid();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> signInWithGoogle() async {
     try {
       isLoading.value = true;
@@ -127,8 +117,8 @@ class AuthController extends GetxController {
 
   void checkTokenValid() async {
     if (box.hasData('token') && Get.currentRoute != '/auth') return;
-    final _userProvider = Get.put(UserProvider());
-    final res = await _userProvider.getUser();
+    final userProvider = Get.put(UserProvider());
+    final res = await userProvider.getUser();
     if (res.statusCode == 401) {
       box.remove('token');
       if (Get.currentRoute != '/auth') {
@@ -153,14 +143,14 @@ class AuthController extends GetxController {
         } else if (res.statusCode == 401) {
           Get.snackbar('Terjadi Kesalahan', 'Email atau Password Salah');
         } else {
-          throw 'Permintaan Gagal';
+          throw 'Periksa koneksi internet anda';
         }
       }
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
       Get.snackbar(
-          'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
+          'Terjadi Kesalahan', e.toString().replaceAll('Exception:', ''));
     }
   }
 
@@ -177,14 +167,16 @@ class AuthController extends GetxController {
         if (res.statusCode == 200) {
           box.write('token', Auth.fromJson(res.body).data.token);
           Get.offAllNamed('/home');
+        } else if (res.statusCode == 400) {
+          Get.snackbar('Terjadi Kesalahan', 'Email sudah terdaftar');
         } else {
-          throw 'Permintaan Gagal';
+          throw 'Periksa koneksi internet anda';
         }
       }
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Terjadi Kesalahan', 'Email sudah digunakan');
+      Get.snackbar('Terjadi Kesalahan', e.toString().replaceAll('Exception:', ''));
     }
   }
 

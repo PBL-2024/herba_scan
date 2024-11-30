@@ -210,7 +210,10 @@ class HomeView extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(Routes.ARTICLE);
+            // print('tes');
+          },
           child: const Text(
             "Lihat semua",
             style: TextStyle(color: Colors.green),

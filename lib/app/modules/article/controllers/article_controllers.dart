@@ -30,12 +30,12 @@ class ArticleController extends GetxController {
         {
           "title": "Daun Kemangi Bisa Buat Kaya Lho...",
           "description": "Daun Kemangi kaya manfaat...",
-          "imageUrl": "assets/images/kemangi.png",
+          "imageUrl": "images/diet.jpg",
         },
         {
           "title": "Aloe Vera untuk Kesehatan Kulit...",
           "description": "Aloe Vera memberikan banyak manfaat...",
-          "imageUrl": "assets/images/aloe_vera.png",
+          "imageUrl": "images/diet.jpg",
         }
       ]);
     } catch (error) {

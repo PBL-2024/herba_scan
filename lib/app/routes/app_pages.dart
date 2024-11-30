@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:herba_scan/app/modules/article/bindings/article_binding.dart';
+import 'package:herba_scan/app/modules/article/views/article_view.dart';
 import 'package:herba_scan/app/modules/auth/views/forget_password_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
@@ -38,6 +40,11 @@ class AppPages {
       name: _Paths.SETTING,
       page: () => const SettingView(),
       binding: SettingBinding(),
+    ),
+    GetPage(
+      name: _Paths.ARTICLE,
+      page: () => const ArticleView(),
+      binding: ArticleBinding(),
     ),
   ];
 }
