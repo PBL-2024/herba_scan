@@ -8,6 +8,11 @@ class ArticleView extends GetView<ArticleController> {
 
   @override
   Widget build(BuildContext context) {
+    // Set default filter to 'terbaru' on first load
+    if (controller.selectedFilter.value.isEmpty) {
+      controller.selectedFilter.value = 'terbaru';
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -26,13 +31,27 @@ class ArticleView extends GetView<ArticleController> {
           return const Center(child: CircularProgressIndicator());
         }
 
+        // Filter articles based on search input
+        List<Map<String, String>> filteredArticles = controller.articles
+            .where((article) =>
+                article['title']!
+                    .toLowerCase()
+                    .contains(controller.articleTitle.value.toLowerCase()) ||
+                article['description']!
+                    .toLowerCase()
+                    .contains(controller.articleTitle.value.toLowerCase()))
+            .toList();
+
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
+                // Search bar
                 TextField(
-                  onChanged: (value) => controller.filterArticles(value),
+                  onChanged: (value) {
+                    controller.articleTitle.value = value;
+                  },
                   decoration: InputDecoration(
                     hintText: 'Cari artikel...',
                     suffixIcon: const Icon(Icons.search),
@@ -42,6 +61,8 @@ class ArticleView extends GetView<ArticleController> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
+
+                // Filter buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -51,12 +72,14 @@ class ArticleView extends GetView<ArticleController> {
                   ],
                 ),
                 const SizedBox(height: 16.0),
+
+                // Display filtered list of articles
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.filteredArticles.length,
+                  itemCount: filteredArticles.length,
                   itemBuilder: (context, index) {
-                    final article = controller.filteredArticles[index];
+                    final article = filteredArticles[index];
                     return _articleCard(article);
                   },
                 ),
@@ -68,6 +91,7 @@ class ArticleView extends GetView<ArticleController> {
     );
   }
 
+  // Filter button widget
   Widget _filterButton(String label, String category) {
     return Obx(() => ElevatedButton(
       onPressed: () => controller.selectedFilter.value = category,
@@ -87,6 +111,7 @@ class ArticleView extends GetView<ArticleController> {
     ));
   }
 
+  // Article card widget
   Widget _articleCard(Map<String, String> article) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
