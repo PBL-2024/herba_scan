@@ -14,6 +14,7 @@ class AuthProvider extends GetConnect {
       request.headers['Content-Type'] = 'application/json';
       return request;
     });
+    httpClient.timeout = Duration(seconds: 30);
   }
 
   Future<Response> signInWithGoogle(GoogleSignInAccount auth) async {
@@ -52,6 +53,11 @@ class AuthProvider extends GetConnect {
 
   Future<Response> sendOtp(String email) async {
     final res = await post('/api/v1/auth/otp/send', {'email': email});
+    return res;
+  }
+
+  Future<Response> sendOtpSignUp(String email) async {
+    final res = await post('/api/v1/auth/otp/signup/send', {'email': email});
     return res;
   }
 

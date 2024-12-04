@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
+import 'package:herba_scan/app/modules/auth/views/otp_verify_view.dart';
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {
@@ -28,7 +29,7 @@ class AuthView extends GetView<AuthController> {
                 ),
                 padding: const EdgeInsets.all(10),
                 child: Obx(
-                      () => Wrap(
+                  () => Wrap(
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -75,7 +76,7 @@ class AuthView extends GetView<AuthController> {
                 child: Form(
                   key: controller.formKey,
                   child: Obx(
-                        () => Column(
+                    () => Column(
                       children: [
                         if (!controller.isLogin.value)
                           ReusableInputField(
@@ -161,11 +162,15 @@ class AuthView extends GetView<AuthController> {
                         const SizedBox(height: 20),
                         ReusableButton(
                           text: controller.isLogin.value ? 'Masuk' : 'Daftar',
-                          onPressed: () {
+                          onPressed: () async {
                             if (controller.formKey.currentState!.validate()) {
-                              controller.isLogin.value
-                                  ? controller.signIn()
-                                  : controller.signUp();
+                              if (controller.isLogin.value) {
+                                controller.signIn();
+                              } else {
+                                if(await controller.sendOtpSignUp()){
+                                  Get.to(const OtpVerifyView());
+                                }
+                              }
                             }
                           },
                           isLoading: controller.isLoading.value,
@@ -240,6 +245,7 @@ class AuthView extends GetView<AuthController> {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

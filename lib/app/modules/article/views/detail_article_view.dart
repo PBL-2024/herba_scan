@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class ArticleDetailView extends StatefulWidget {
@@ -125,10 +126,11 @@ class _ArticleDetailViewState extends State<ArticleDetailView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        AutoSizeText(
                           widget.title,
+                          maxFontSize: 24.0,
                           style: const TextStyle(
-                            fontSize: 24.0,
+                            // fontSize: 24.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),

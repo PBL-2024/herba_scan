@@ -36,7 +36,9 @@ class ArticleController extends GetxController {
           "imageUrl": "images/diet.jpg",
         }
       ]);
-      filteredArticles.assignAll(articles); // Awalnya tampil semua artikel
+    } catch (error) {
+      // Log or show error messages if necessary
+      print("Error fetching articles: $error");
     } finally {
       isLoading(false);
     }
