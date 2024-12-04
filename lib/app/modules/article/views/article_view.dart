@@ -25,14 +25,14 @@ class ArticleView extends GetView<ArticleController> {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
                 TextField(
-                  onChanged: (value) => controller.articleTitle.value = value,
+                  onChanged: (value) => controller.filterArticles(value),
                   decoration: InputDecoration(
                     hintText: 'Cari artikel...',
                     suffixIcon: const Icon(Icons.search),
@@ -42,7 +42,6 @@ class ArticleView extends GetView<ArticleController> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -52,13 +51,12 @@ class ArticleView extends GetView<ArticleController> {
                   ],
                 ),
                 const SizedBox(height: 16.0),
-
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.articles.length,
+                  itemCount: controller.filteredArticles.length,
                   itemBuilder: (context, index) {
-                    final article = controller.articles[index];
+                    final article = controller.filteredArticles[index];
                     return _articleCard(article);
                   },
                 ),
