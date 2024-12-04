@@ -10,6 +10,7 @@ import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 import 'package:herba_scan/app/modules/setting/bindings/setting_binding.dart';
 import 'package:herba_scan/app/modules/setting/views/change_email_view.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingController extends GetxController {
@@ -45,11 +46,43 @@ class SettingController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    checkToken();
   }
 
   @override
   void onClose() {
     super.onClose();
+  }
+
+  void checkToken() async {
+    if (box.read('token') == null){
+      confirmAuth();
+    }
+  }
+
+  void confirmAuth() {
+    Get.defaultDialog(
+      title: 'Peringatan',
+      middleText: 'Anda harus login terlebih dahulu',
+      actions: [
+        ReusableButton(
+          text: 'Login',
+          onPressed: () {
+            Get.offAllNamed(Routes.AUTH);
+          },
+        ),
+        ReusableButton(
+          text: 'Kembali',
+          buttonStyle: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red.shade700,
+            fixedSize: const Size(double.infinity, 50),
+          ),
+          onPressed: () {
+            Get.offAllNamed(Routes.HOME);
+          },
+        ),
+      ],
+    );
   }
 
   void logout() {
@@ -142,7 +175,6 @@ class SettingController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Terjadi Kesalahan', e.toString());
-      Get.toNamed('/auth');
     }
   }
 
