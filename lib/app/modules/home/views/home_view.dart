@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:herba_scan/app/modules/home/views/favorite_view.dart';
 import 'package:herba_scan/app/modules/home/views/riwayat_view.dart';
 import 'package:herba_scan/app/routes/app_pages.dart';
+import 'package:herba_scan/app/modules/plant/views/plant_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -110,7 +111,7 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 15),
 
               // Section: Tanaman
-              _buildSectionTitle("Tanaman"),
+              _buildSectionTitle(context, "Tanaman"),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -124,7 +125,7 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Section: Artikel Kesehatan
-              _buildSectionTitle("Artikel Kesehatan"),
+              _buildSectionTitle(context, "Artikel Kesehatan"),
               const SizedBox(height: 8),
               _buildArticleCard("Daun Kemangi Bisa Buat Kaya...",
                   "assets/images/lidah-buaya.png"),
@@ -198,7 +199,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
