@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/app/data/models/auth/auth_user.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
 import 'package:herba_scan/app/modules/auth/views/forget_password_view.dart';
+import 'package:herba_scan/app/modules/auth/views/otp_verify_view.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 
 class AuthController extends GetxController {
@@ -23,12 +26,15 @@ class AuthController extends GetxController {
   final isLogin = true.obs;
   final isLoading = false.obs;
 
-  final showPassword = false.obs;
+  final showPassword = true.obs;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final box = GetStorage();
 
   final AuthProvider _authProvider = Get.put(AuthProvider());
+
+  final countDown = 0.obs;
+
   static const List<String> scopes = <String>[
     'email',
     'profile',
@@ -46,16 +52,6 @@ class AuthController extends GetxController {
     super.onInit();
     //   prevent user to go back to login page
     checkTokenValid();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   Future<void> signInWithGoogle() async {
@@ -81,6 +77,42 @@ class AuthController extends GetxController {
       Get.snackbar(
           'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
     }
+  }
+
+  Future<bool> sendOtpSignUp() async {
+    Completer<bool> completer = Completer();
+    isLoading.value = true;
+    final authProvider = Get.put(AuthProvider());
+    final res = await authProvider.sendOtpSignUp(emailController.text);
+    if (res.statusCode == 200) {
+      Get.snackbar('Berhasil', 'Kode OTP telah dikirim ke email anda');
+      setCountDown();
+      completer.complete(true);
+    } else {
+      if (kDebugMode) {
+        debugPrint(res.bodyString);
+      }
+      Get.snackbar('Terjadi Kesalahan', "Email sudah terdaftar");
+      completer.complete(false);
+    }
+    isLoading.value = false;
+    return completer.future;
+  }
+
+  Future<bool> verifyOtpSignUp(String email, String otp) async {
+    Completer<bool> completer = Completer();
+    isLoading.value = true;
+    final authProvider = Get.put(AuthProvider());
+    final res = await authProvider.verfiyOtp(email, otp);
+    if (res.statusCode == 200) {
+      isLoading.value = false;
+      completer.complete(true);
+    } else {
+      Get.snackbar('Terjadi Kesalahan', 'Kode OTP salah');
+      isLoading.value = false;
+      completer.complete(false);
+    }
+    return completer.future;
   }
 
 //   Logout
@@ -112,6 +144,7 @@ class AuthController extends GetxController {
     this.isLogin.value = isLogin;
     // reset validation
     formKey.currentState!.reset();
+    showPassword.value = false;
     clearForm();
   }
 
@@ -123,12 +156,16 @@ class AuthController extends GetxController {
     emailController.clear();
     passwordController.clear();
     nameController.clear();
+    cPasswordController.clear();
+    otpController.clear();
+    newPassword.clear();
+    cNewPassword.clear();
   }
 
   void checkTokenValid() async {
     if (box.hasData('token') && Get.currentRoute != '/auth') return;
-    final _userProvider = Get.put(UserProvider());
-    final res = await _userProvider.getUser();
+    final userProvider = Get.put(UserProvider());
+    final res = await userProvider.getUser();
     if (res.statusCode == 401) {
       box.remove('token');
       if (Get.currentRoute != '/auth') {
@@ -153,21 +190,22 @@ class AuthController extends GetxController {
         } else if (res.statusCode == 401) {
           Get.snackbar('Terjadi Kesalahan', 'Email atau Password Salah');
         } else {
-          throw 'Permintaan Gagal';
+          throw 'Periksa koneksi internet anda';
         }
       }
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
       Get.snackbar(
-          'Terjadi Kesalahan', 'Silahkan coba lagi atau hubungi admin');
+          'Terjadi Kesalahan', e.toString().replaceAll('Exception:', ''));
     }
   }
 
   Future<void> signUp() async {
     try {
       isLoading.value = true;
-      if (formKey.currentState!.validate()) {
+      bool otp = await verifyOtpSignUp(emailController.text, otpController.text);
+      if (formKey.currentState!.validate() && otp) {
         final res = await _authProvider.signUp(
           emailController.text,
           passwordController.text,
@@ -175,18 +213,25 @@ class AuthController extends GetxController {
           nameController.text,
         );
         if (res.statusCode == 200) {
-          box.write('token', Auth.fromJson(res.body).data.token);
+          final authRes = Auth.fromJson(res.body);
+          box.write('token', authRes.data.token);
           Get.offAllNamed('/home');
+          Get.snackbar('Selamat Datang ${authRes.data.name}', 'Registrasi Berhasil');
+        } else if (res.statusCode == 400) {
+          Get.snackbar('Terjadi Kesalahan', 'Email sudah terdaftar');
         } else {
-          throw 'Permintaan Gagal';
+          throw 'Periksa koneksi internet anda';
         }
       }
       isLoading.value = false;
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar('Terjadi Kesalahan', 'Email sudah digunakan');
+      Get.snackbar(
+          'Terjadi Kesalahan', e.toString().replaceAll('Exception:', ''));
     }
   }
+
+
 
   Future<void> sendOtp() async {
     isLoading.value = true;
@@ -230,5 +275,13 @@ class AuthController extends GetxController {
       Get.snackbar('Terjadi Kesalahan', 'Gagal mengubah password');
     }
     isLoading.value = false;
+  }
+
+  Future<void> setCountDown() async {
+    countDown.value = 30;
+    for (var i = countDown.value; i >= 0; i--) {
+      await Future.delayed(Duration(seconds: 1));
+      countDown.value = i;
+    }
   }
 }

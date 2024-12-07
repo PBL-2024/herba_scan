@@ -212,10 +212,8 @@ class HomeView extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const PlantView()),
-            );
+            Get.toNamed(Routes.ARTICLE);
+            // print('tes');
           },
           child: const Text(
             "Lihat semua",

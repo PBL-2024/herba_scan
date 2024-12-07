@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:herba_scan/config.example.dart';
+import 'package:herba_scan/config.dart';
 
 class UserProvider extends GetConnect {
   @override
@@ -49,8 +49,12 @@ class UserProvider extends GetConnect {
   Future<Response> deleteUnclassifiedPlant(String id) =>
       delete('/api/v1/unclassified-plant/$id');
 
-  Future<Response> sendOtp(Map<String, dynamic> data) =>
-      post('/api/v1/user/otp/send', data, contentType: 'application/json');
+  Future<Response> sendOtp(Map<String, dynamic> data) => post(
+        '/api/v1/user/otp/send',
+        data,
+        contentType: 'application/json',
+        headers: {'Accept': 'application/json'},
+      );
 
   Future<Response> getPlantSuggestions() =>
       get('/api/v1/unclassified-plant/list',
