@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:herba_scan/app/modules/plant/views/detail_view.dart';
-
-import '../controllers/plant_controller.dart';
-import 'package:herba_scan/app/modules/plant/views/popular_view.dart';
-import 'package:herba_scan/app/modules/plant/views/last_view.dart';
-
 import 'package:herba_scan/app/modules/home/views/home_view.dart';
+import 'package:herba_scan/app/modules/plant/views/popular_view.dart';
+import 'package:herba_scan/app/modules/plant/views/plant_view.dart';
+import 'package:herba_scan/app/modules/plant/views/detail_view.dart';
+import '../controllers/plant_controller.dart';
 
 
-class PlantView extends StatelessWidget {
-  const PlantView({Key? key}) : super(key: key);
+
+class LastView extends StatelessWidget {
+  const LastView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class PlantView extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomeView()),
+              MaterialPageRoute(builder: (context) => const PlantView()),
             );
           },
         ),
@@ -57,7 +56,7 @@ class PlantView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FilterButton(label: 'Terbaru', isSelected: true),
+                FilterButton(label: 'Paling Lama', isSelected: true),
                 FilterButton(
                   label: 'Populer',
                   isSelected: false,
@@ -65,19 +64,19 @@ class PlantView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PopularView(),
+                        builder: (context) => const PlantView(),
                       ),
                     );
                   },
                 ),
                 FilterButton(
-                  label: 'Paling Lama',
+                  label: 'Terbaru',
                   isSelected: false,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const LastView(),
+                        builder: (context) => const PlantView(),
                       ),
                     );
                   },

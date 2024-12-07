@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:herba_scan/app/modules/plant/views/detail_view.dart';
-
-import '../controllers/plant_controller.dart';
-import 'package:herba_scan/app/modules/plant/views/popular_view.dart';
-import 'package:herba_scan/app/modules/plant/views/last_view.dart';
-
 import 'package:herba_scan/app/modules/home/views/home_view.dart';
+import 'package:herba_scan/app/modules/plant/views/plant_view.dart';
+import 'package:herba_scan/app/modules/plant/views/detail_view.dart';
+import '../controllers/plant_controller.dart';
 
 
-class PlantView extends StatelessWidget {
-  const PlantView({Key? key}) : super(key: key);
+
+class PopularView extends StatelessWidget {
+  const PopularView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class PlantView extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomeView()),
+              MaterialPageRoute(builder: (context) => const PlantView()),
             );
           },
         ),
@@ -57,15 +55,15 @@ class PlantView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FilterButton(label: 'Terbaru', isSelected: true),
+                FilterButton(label: 'Populer', isSelected: true),
                 FilterButton(
-                  label: 'Populer',
+                  label: 'Terbaru',
                   isSelected: false,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PopularView(),
+                        builder: (context) => const PlantView(),
                       ),
                     );
                   },
@@ -77,7 +75,7 @@ class PlantView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const LastView(),
+                        builder: (context) => const PlantView(),
                       ),
                     );
                   },
@@ -94,7 +92,6 @@ class PlantView extends StatelessWidget {
                     title: 'Daun Pepaya',
                     description: 'Daun Pepaya Bisa Buat Kaya Lho karena ...',
                     onTap: () {
-                      // Navigasi ke halaman detail Daun Sirih
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -113,7 +110,6 @@ class PlantView extends StatelessWidget {
                     title: 'Daun Sirih',
                     description: 'Daun Sirih Bisa Buat Kaya Lho karena ...',
                     onTap: () {
-                      // Navigasi ke halaman detail Daun Sirih
                       Navigator.push(
                         context,
                         MaterialPageRoute(
