@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/models/plant_response.dart';
-import 'package:herba_scan/app/data/models/riwayat_item.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/routes/app_pages.dart';

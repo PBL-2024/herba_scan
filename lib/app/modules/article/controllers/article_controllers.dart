@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -38,7 +39,9 @@ class ArticleController extends GetxController {
       ]);
     } catch (error) {
       // Log or show error messages if necessary
-      print("Error fetching articles: $error");
+      if (kDebugMode) {
+        debugPrint("Error fetching articles: $error");
+      }
     } finally {
       isLoading(false);
     }

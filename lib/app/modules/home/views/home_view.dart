@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
-import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
 import 'package:herba_scan/app/modules/home/views/beranda_view.dart';
 import 'package:herba_scan/app/modules/home/views/favorite_view.dart';
 import 'package:herba_scan/app/modules/home/views/riwayat_view.dart';
@@ -14,7 +13,6 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final userController = Get.put(UserController());
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -40,11 +38,11 @@ class HomeView extends GetView<HomeController> {
                             onTap: () {
                               Get.toNamed(Routes.SETTING);
                             },
-                            child: userController.user!.value.imageUrl != null
+                            child: controller.userController.user!.value.imageUrl != null
                                 ? CircleAvatar(
                                     radius: 20,
                                     backgroundImage: NetworkImage(
-                                        userController.user!.value.imageUrl!),
+                                        controller.userController.user!.value.imageUrl!),
                                   )
                                 : CircleAvatar(
                                     radius: 24,

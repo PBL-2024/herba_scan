@@ -6,6 +6,7 @@ import 'package:herba_scan/app/data/models/favorite_item.dart';
 import 'package:herba_scan/app/data/models/response_user_favorites.dart';
 import 'package:herba_scan/app/data/models/riwayat_item.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
+import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 import 'package:herba_scan/app/modules/plant/controllers/plant_controller.dart';
 
@@ -16,6 +17,8 @@ class HomeController extends GetxController {
   final activeTab = 'Beranda'.obs;
   final RxList<RiwayatItem> riwayat = <RiwayatItem>[].obs;
   final RxList<FavoriteItem> favorites = <FavoriteItem>[].obs;
+
+  final userController = Get.find<UserController>();
   final plantController = Get.find<PlantController>();
 
   @override

@@ -123,7 +123,6 @@ class PlantController extends GetxController {
         if (value.statusCode == 200) {
           final response = plantFavoriteFromJson(value.bodyString!);
           isFavoritePlant.value = response.data!;
-          print(isFavoritePlant.value);
         }
       });
     }
