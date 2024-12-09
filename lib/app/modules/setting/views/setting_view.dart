@@ -17,11 +17,12 @@ class SettingView extends GetView<SettingController> {
 
   @override
   Widget build(BuildContext context) {
+    // final userController = Get.put(UserController());
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
             if (Get.previousRoute.isEmpty) {
               Get.offAllNamed('/home');
@@ -74,7 +75,7 @@ class SettingView extends GetView<SettingController> {
                           child: GetX<SettingController>(
                             builder: (controller) {
                               final imageUrl =
-                                  controller.user.value.data?.imageUrl;
+                                  controller.userController.user!.value.imageUrl;
 
                               if (imageUrl == null || imageUrl.isEmpty) {
                                 return const Icon(
@@ -112,11 +113,11 @@ class SettingView extends GetView<SettingController> {
                         ),
                       ),
                       title: AutoSizeText(
-                        controller.user.value.data?.name ?? 'Loading...',
+                        controller.userController.user!.value.name ?? 'Data tidak ditemukan',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: AutoSizeText(
-                        controller.user.value.data?.email ?? 'Loading...',
+                        controller.userController.user!.value.email ?? 'Data tidak ditemukan',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade600),

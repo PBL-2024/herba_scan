@@ -59,4 +59,7 @@ class UserProvider extends GetConnect {
   Future<Response> getPlantSuggestions() =>
       get('/api/v1/unclassified-plant/list',
           headers: {'Accept': 'application/json'});
+
+  Future<Response> getFavorites() =>
+      get('/api/v1/user/favorites', headers: {'Accept': 'application/json'});
 }

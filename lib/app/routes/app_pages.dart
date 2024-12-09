@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:herba_scan/app/modules/article/bindings/article_binding.dart';
 import 'package:herba_scan/app/modules/article/views/article_view.dart';
 import 'package:herba_scan/app/modules/auth/views/forget_password_view.dart';
+import 'package:herba_scan/app/modules/plant/views/detail_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -36,6 +37,11 @@ class AppPages {
     GetPage(
       name: _Paths.PLANT,
       page: () => const PlantView(),
+      binding: PlantBinding(),
+    ),
+    GetPage(
+      name: _Paths.PLANT_DETAIL,
+      page: () => const PlantDetailView(),
       binding: PlantBinding(),
     ),
     GetPage(

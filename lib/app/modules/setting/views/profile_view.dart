@@ -15,12 +15,11 @@ class ProfileView extends GetView<SettingController> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final controller = Get.find<SettingController>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
             Get.back();
           },
@@ -62,7 +61,7 @@ class ProfileView extends GetView<SettingController> {
                         child: GetX<SettingController>(
                           builder: (controller) {
                             final imageUrl =
-                                controller.user.value.data?.imageUrl;
+                                controller.userController.user!.value.imageUrl;
 
                             if (imageUrl == null || imageUrl.isEmpty) {
                               return const Icon(
@@ -180,7 +179,8 @@ class ProfileView extends GetView<SettingController> {
                               onPressed: () {
                                 if (formKey.currentState!.validate() &&
                                     !controller.isLoading.value) {
-                                  Get.to(() => ChangeEmailView(),binding: SettingBinding());
+                                  Get.to(() => ChangeEmailView(),
+                                      binding: SettingBinding());
                                 }
                               },
                             ),

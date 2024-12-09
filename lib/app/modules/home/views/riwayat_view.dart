@@ -1,157 +1,120 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/models/riwayat_item.dart';
+import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 
-import 'package:flutter/material.dart';
-
-class RiwayatView extends StatelessWidget {
+class RiwayatView extends GetView<HomeController> {
   const RiwayatView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Data dummy untuk artikel
-    final List<Map<String, String>> articles = [
-      {
-        "title": "Daun Kemangi Bisa Buat Kaya...",
-        "image": "assets/basil_leaf.png"
-      },
-      {
-        "title": "Daun Kemangi Bisa Buat Kaya...",
-        "image": "assets/aloe_vera.png"
-      },
-      {
-        "title": "Daun Kemangi Bisa Buat Kaya...",
-        "image": "assets/papaya_leaf.png"
-      },
-      {
-        "title": "Daun Kemangi Bisa Buat Kaya...",
-        "image": "assets/aloe_vera.png"
-      },
-      {
-        "title": "Daun Kemangi Bisa Buat Kaya...",
-        "image": "assets/papaya_leaf.png"
-      },
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Riwayat"),
-        backgroundColor: Colors.green,
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Obx(
+                () => controller.riwayat.isNotEmpty
+                    ? Column(
+                        children: controller.riwayat
+                            .map((e) => _buildRiwayatCard(e))
+                            .toList(),
+                      )
+                    : _emptyRiwayat(),
+              )
+            ],
+          ),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+    );
+  }
+
+  Widget _buildRiwayatCard(RiwayatItem item) {
+    return GestureDetector(
+      onTap: () {
+        if (item.type == 'tanaman') {
+          Get.toNamed(Routes.PLANT_DETAIL,
+              parameters: {'id': item.id.toString()});
+        }
+      },
+      onDoubleTap: () {
+        controller.dialogConfirmDeleteAll();
+      },
+      onLongPress: () {
+        controller.dialogConfirmDelete(item.hash);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding:
+            const EdgeInsets.only(right: 18, left: 12, top: 10, bottom: 10),
+        decoration: BoxDecoration(
+          color: Themes.backgroundColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Row(
-            //       children: [
-            //         CircleAvatar(
-            //           radius: 24,
-            //           backgroundColor: Colors.green.shade200,
-            //           child: Icon(Icons.person, color: Colors.white),
-            //         ),
-            //         const SizedBox(width: 8),
-            //         Column(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: const [
-            //             Text(
-            //               "Hai!",
-            //               style: TextStyle(
-            //                 fontSize: 16,
-            //                 fontWeight: FontWeight.bold,
-            //               ),
-            //             ),
-            //             Text(
-            //               "Selamat pagi",
-            //               style: TextStyle(
-            //                 fontSize: 14,
-            //                 color: Colors.grey,
-            //               ),
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            //     Container(
-            //       padding: const EdgeInsets.all(8),
-            //       decoration: BoxDecoration(
-            //         shape: BoxShape.circle,
-            //         color: Colors.green.shade200,
-            //       ),
-            //       child: const Icon(Icons.qr_code, color: Colors.white),
-            //     ),
-            //   ],
-            // ),
-            const SizedBox(height: 24),
-
-            // Tab Bar
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildTabButton("Beranda", false, context, null),
-                _buildTabButton("Riwayat", true, context, null),
-                _buildTabButton("Favorit", false, context, null),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            // List Artikel
-            Expanded(
-              child: ListView.builder(
-                itemCount: articles.length,
-                itemBuilder: (context, index) {
-                  final article = articles[index];
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade50,
+            Card(
+              color: Colors.white,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: item.imgPath.startsWith('http')
+                  ? ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      border: index == 3
-                          ? Border.all(color: Colors.blue, width: 2)
-                          : null, // Highlight untuk item ke-4
+                      child: Image.network(
+                        item.imgPath,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        item.imgPath,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          article["image"]!,
-                          height: 50,
-                          width: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                article["title"]!,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                "Daun kemangi bisa buat kaya lho karena dugaan...",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AutoSizeText(
+                      item.title,
+                      style: TextStyle(
+                        fontFamily:
+                            GoogleFonts.poppins(fontWeight: FontWeight.w700)
+                                .fontFamily,
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  );
-                },
+                    const SizedBox(height: 4),
+                    Container(
+                      constraints: BoxConstraints(maxHeight: 50),
+                      // Adjust the height as needed
+                      child: HtmlWidget(
+                        item.description,
+                        textStyle: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
@@ -160,39 +123,30 @@ class RiwayatView extends StatelessWidget {
     );
   }
 
-  Widget _buildTabButton(
-    String label,
-    bool isActive,
-    BuildContext context,
-    Widget? targetPage,
-  ) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          if (targetPage != null) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => targetPage),
-            );
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: isActive ? Colors.green.shade200 : Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: isActive ? null : Border.all(color: Colors.green.shade200),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isActive ? Colors.white : Colors.green,
-              ),
+  Widget _emptyRiwayat() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset('assets/images/not-found.png'),
+          const SizedBox(height: 16),
+          const Text(
+            "Riwayat Kosong",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
             ),
           ),
-        ),
+          const SizedBox(height: 8),
+          const Text(
+            "Tidak ada riwayat yang tersimpan",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+        ],
       ),
     );
   }

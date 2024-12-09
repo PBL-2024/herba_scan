@@ -19,7 +19,7 @@ class ChangeEmailView extends GetView<SettingController> {
       appBar: AppBar(
         backgroundColor: Themes.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
             Get.back();
           },

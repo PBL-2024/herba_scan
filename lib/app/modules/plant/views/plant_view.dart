@@ -1,38 +1,40 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:herba_scan/app/modules/plant/views/detail_view.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/widgets/plant_card.dart';
+import 'package:herba_scan/app/modules/plant/controllers/plant_controller.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-import '../controllers/plant_controller.dart';
-import 'package:herba_scan/app/modules/plant/views/popular_view.dart';
-import 'package:herba_scan/app/modules/plant/views/last_view.dart';
-
-import 'package:herba_scan/app/modules/home/views/home_view.dart';
-
-
-class PlantView extends StatelessWidget {
-  const PlantView({Key? key}) : super(key: key);
+class PlantView extends GetView<PlantController> {
+  const PlantView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getPlant(filter: controller.filterSelected.value);
+    });
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeView()),
-            );
-          },
-        ),
-        title: const Text(
+        scrolledUnderElevation: 0,
+        title: Text(
           'Tanaman',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              color: Colors.black,
+              fontFamily:
+                  GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,93 +43,108 @@ class PlantView extends StatelessWidget {
           children: [
             // Search Bar
             TextField(
+              controller: controller.seachController,
               decoration: InputDecoration(
                 hintText: 'Cari tanaman...',
-                prefixIcon: const Icon(Icons.search),
+                suffixIcon: const Icon(Icons.search),
+                focusColor: Colors.green,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                  borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: Colors.white,
               ),
+              onEditingComplete: () {
+                controller.searchPlant();
+              },
             ),
             const SizedBox(height: 16.0),
             // Filter Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FilterButton(label: 'Terbaru', isSelected: true),
-                FilterButton(
-                  label: 'Populer',
-                  isSelected: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PopularView(),
-                      ),
-                    );
-                  },
+            Obx(
+              () => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FilterButton(
+                        label: 'Terbaru',
+                        isSelected:
+                            controller.filterSelected.value == 'terbaru',
+                        onTap: () {
+                          controller.filterSelected.value = 'terbaru';
+                          controller.getPlant(filter: 'terbaru');
+                        }),
+                    FilterButton(
+                      label: 'Populer',
+                      isSelected: controller.filterSelected.value == 'populer',
+                      onTap: () {
+                        controller.filterSelected.value = 'populer';
+                        controller.getPlant(filter: 'populer');
+                      },
+                    ),
+                    FilterButton(
+                      label: 'Terfavorit',
+                      isSelected: controller.filterSelected.value == 'favorit',
+                      onTap: () {
+                        controller.filterSelected.value = 'favorit';
+                        controller.getPlant(filter: 'favorit');
+                      },
+                    ),
+                    FilterButton(
+                      label: 'Paling Lama',
+                      isSelected: controller.filterSelected.value == 'lama',
+                      onTap: () {
+                        controller.filterSelected.value = 'lama';
+                        controller.getPlant(filter: 'terlama');
+                      },
+                    ),
+                  ],
                 ),
-                FilterButton(
-                  label: 'Paling Lama',
-                  isSelected: false,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LastView(),
-                      ),
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
             const SizedBox(height: 16.0),
             // Plant Cards
             Expanded(
-              child: ListView(
-                children: [
-                  PlantCard(
-                    imagePath: 'assets/pepaya.png',
-                    title: 'Daun Pepaya',
-                    description: 'Daun Pepaya Bisa Buat Kaya Lho karena ...',
-                    onTap: () {
-                      // Navigasi ke halaman detail Daun Sirih
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PlantDetailView(
-                            plantName: 'Daun Sirih',
-                            imagePath: 'assets/daun_sirih.png',
-                            description: 'Deskripsi Daun Sirih...',
-                          ),
-                        ),
-                      );
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return Skeletonizer(
+                    child: ListView.builder(
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return PlantCard(
+                          imagePath: 'assets/images/not-found.png',
+                          title: 'tes',
+                          description: 'test',
+                          onTap: () {},
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      controller.getPlant();
+                      await Future.delayed(const Duration(seconds: 1));
                     },
-                  ),
-                  const SizedBox(height: 12.0),
-                  PlantCard(
-                    imagePath: 'assets/sirih.png',
-                    title: 'Daun Sirih',
-                    description: 'Daun Sirih Bisa Buat Kaya Lho karena ...',
-                    onTap: () {
-                      // Navigasi ke halaman detail Daun Sirih
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PlantDetailView(
-                            plantName: 'Daun Sirih',
-                            imagePath: 'assets/daun_sirih.png',
-                            description: 'Deskripsi Daun Sirih...',
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                    child: ListView.builder(
+                      itemCount: controller.plants.length,
+                      itemBuilder: (context, index) {
+                        final plant = controller.plants[index];
+                        return PlantCard(
+                          imagePath: plant.coverUrl!,
+                          title: plant.nama!,
+                          description: plant.deskripsi!,
+                          onTap: () {
+                            Get.toNamed(Routes.PLANT_DETAIL, parameters: {
+                              'id': plant.id!.toString(),
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }
+              }),
             ),
           ],
         ),
@@ -139,85 +156,29 @@ class PlantView extends StatelessWidget {
 class FilterButton extends StatelessWidget {
   final String label;
   final bool isSelected;
-  final VoidCallback? onTap;  // Tambahkan onTap
+  final VoidCallback? onTap; // Tambahkan onTap
 
-  const FilterButton({Key? key, required this.label, this.isSelected = false, this.onTap}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onTap,  // Panggil onTap saat tombol ditekan
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.green[100] : Colors.grey[200],
-        foregroundColor: isSelected ? Colors.green : Colors.black,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-      ),
-      child: Text(label),
-    );
-  }
-}
-
-class PlantCard extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String description;
-  final VoidCallback onTap; // Fungsi navigasi sebagai parameter
-
-  const PlantCard({
-    Key? key,
-    required this.imagePath,
-    required this.title,
-    required this.description,
-    required this.onTap, // Menerima fungsi navigasi
-  }) : super(key: key);
+  const FilterButton(
+      {super.key, required this.label, this.isSelected = false, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap, // Memanggil fungsi navigasi saat card ditekan
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.green[50],
-          borderRadius: BorderRadius.circular(12.0),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: onTap, // Panggil onTap saat tombol ditekan
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isSelected ? Themes.buttonColor : Colors.grey[200],
+          foregroundColor: isSelected ? Colors.white : Colors.black,
+          textStyle: TextStyle(
+              fontSize: 15,
+              fontFamily:
+                  GoogleFonts.poppins(fontWeight: FontWeight.w500).fontFamily),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Gambar Tanaman
-            Image.asset(
-              imagePath,
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(width: 12.0),
-            // Info Tanaman
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                  const SizedBox(height: 4.0),
-                  Text(
-                    description,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12.0),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: Text(label),
       ),
     );
   }

@@ -27,7 +27,7 @@ class UploadPlantView extends GetView<UploadPlantController> {
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
             Get.back();
           },
