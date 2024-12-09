@@ -87,7 +87,7 @@ class PlantView extends GetView<PlantController> {
                       isSelected: controller.filterSelected.value == 'favorit',
                       onTap: () {
                         controller.filterSelected.value = 'favorit';
-                        controller.getPlant(filter: 'favorit');
+                        controller.getPlant(filter: 'terfavorit');
                       },
                     ),
                     FilterButton(
