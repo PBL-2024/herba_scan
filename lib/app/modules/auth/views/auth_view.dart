@@ -13,7 +13,6 @@ class AuthView extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController controller = Get.put(AuthController());
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -22,7 +21,7 @@ class AuthView extends GetView<AuthController> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_sharp),
-          onPressed: () => Get.offAllNamed(Routes.HOME),
+          onPressed: () => Get.offNamed(Routes.HOME),
         ),
       ),
       backgroundColor: Colors.white,
@@ -42,7 +41,6 @@ class AuthView extends GetView<AuthController> {
                 child: Obx(
                   () => Wrap(
                     children: [
-
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: controller.isLogin.value

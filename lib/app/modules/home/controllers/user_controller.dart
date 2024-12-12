@@ -39,7 +39,7 @@ class UserController extends GetxController {
       box.remove('token');
       await _googleSignIn.signOut();
       status.complete(true);
-    }else{
+    } else {
       status.complete(false);
     }
     return status.future;
@@ -58,17 +58,17 @@ class UserController extends GetxController {
         ReusableButton(
           text: 'Login',
           onPressed: () {
-            Get.offAllNamed(Routes.AUTH);
+            Get.offNamed(Routes.AUTH);
           },
         ),
         ReusableButton(
-          text: 'Kembali',
+          text: 'Batal',
           buttonStyle: ElevatedButton.styleFrom(
             backgroundColor: Colors.red.shade700,
             fixedSize: const Size(double.infinity, 50),
           ),
           onPressed: () {
-            Get.offAllNamed(Routes.HOME);
+            Get.back();
           },
         ),
       ],

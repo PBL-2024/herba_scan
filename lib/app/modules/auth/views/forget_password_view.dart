@@ -8,12 +8,11 @@ import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
 import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
 
-class ForgetPasswordView extends GetView {
+class ForgetPasswordView extends GetView<AuthController> {
   const ForgetPasswordView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AuthController>();
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: Themes.backgroundColor,

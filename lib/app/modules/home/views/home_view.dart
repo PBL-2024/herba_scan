@@ -36,13 +36,19 @@ class HomeView extends GetView<HomeController> {
                         Obx(
                           () => InkWell(
                             onTap: () {
-                              Get.toNamed(Routes.SETTING);
+                              if (controller.userController.checkToken()) {
+                                Get.toNamed(Routes.SETTING);
+                              } else {
+                                controller.userController.confirmAuth();
+                              }
                             },
-                            child: controller.userController.user!.value.imageUrl != null
+                            child: controller
+                                        .userController.user!.value.imageUrl !=
+                                    null
                                 ? CircleAvatar(
                                     radius: 20,
-                                    backgroundImage: NetworkImage(
-                                        controller.userController.user!.value.imageUrl!),
+                                    backgroundImage: NetworkImage(controller
+                                        .userController.user!.value.imageUrl!),
                                   )
                                 : CircleAvatar(
                                     radius: 24,
@@ -90,7 +96,8 @@ class HomeView extends GetView<HomeController> {
                           shape: BoxShape.circle,
                           color: Colors.green.shade200,
                         ),
-                        child: const Icon(Icons.document_scanner, color: Colors.white),
+                        child: const Icon(Icons.document_scanner,
+                            color: Colors.white),
                       ),
                     ),
                   ],
