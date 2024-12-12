@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'detail_article_view.dart';
 import 'package:get/get.dart';
 import 'package:herba_scan/app/modules/article/controllers/article_controllers.dart';
+import 'detail_article_view.dart';
 
 class ArticleView extends GetView<ArticleController> {
   const ArticleView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Set default filter to 'terbaru' on first load
-    if (controller.selectedFilter.value.isEmpty) {
-      controller.selectedFilter.value = 'terbaru';
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -20,9 +15,7 @@ class ArticleView extends GetView<ArticleController> {
         centerTitle: true,
         backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
@@ -31,26 +24,15 @@ class ArticleView extends GetView<ArticleController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // Filter articles based on search input
-        List<Map<String, String>> filteredArticles = controller.articles
-            .where((article) =>
-                article['title']!
-                    .toLowerCase()
-                    .contains(controller.articleTitle.value.toLowerCase()) ||
-                article['description']!
-                    .toLowerCase()
-                    .contains(controller.articleTitle.value.toLowerCase()))
-            .toList();
-
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                // Search bar
                 TextField(
                   onChanged: (value) {
                     controller.articleTitle.value = value;
+                    controller.applySearchFilter(); // Terapkan filter pencarian
                   },
                   decoration: InputDecoration(
                     hintText: 'Cari artikel...',
@@ -61,8 +43,6 @@ class ArticleView extends GetView<ArticleController> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-
-                // Filter buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -72,14 +52,12 @@ class ArticleView extends GetView<ArticleController> {
                   ],
                 ),
                 const SizedBox(height: 16.0),
-
-                // Display filtered list of articles
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: filteredArticles.length,
+                  itemCount: controller.filteredArticles.length,
                   itemBuilder: (context, index) {
-                    final article = filteredArticles[index];
+                    final article = controller.filteredArticles[index];
                     return _articleCard(article);
                   },
                 ),
@@ -91,28 +69,26 @@ class ArticleView extends GetView<ArticleController> {
     );
   }
 
-  // Filter button widget
   Widget _filterButton(String label, String category) {
     return Obx(() => ElevatedButton(
-      onPressed: () => controller.selectedFilter.value = category,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: controller.selectedFilter.value == category
-            ? Colors.green
-            : const Color.fromARGB(255, 213, 213, 213),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: controller.selectedFilter.value == category
-              ? Colors.white
-              : Colors.black,
-        ),
-      ),
-    ));
+          onPressed: () => controller.updateFilter(category),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: controller.selectedFilter.value == category
+                ? Colors.green
+                : const Color.fromARGB(255, 213, 213, 213),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: controller.selectedFilter.value == category
+                  ? Colors.white
+                  : Colors.black,
+            ),
+          ),
+        ));
   }
 
-  // Article card widget
-  Widget _articleCard(Map<String, String> article) {
+  Widget _articleCard(Map<String, dynamic> article) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       color: const Color(0xFFE7F9E0),
@@ -123,28 +99,35 @@ class ArticleView extends GetView<ArticleController> {
       child: InkWell(
         onTap: () {
           Get.to(() => ArticleDetailView(
-                title: article['title']!,
-                content: article['description']!,
-                imageUrl: article['imageUrl']!,
+                title: article['title'] ?? 'No Title',
+                content: article['description'] ?? 'No Description',
+                imageUrl: article['imageUrl'] ?? '',
               ));
         },
         child: Row(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Image.asset(
-                article['imageUrl']!,
-                width: 150,
-                height: 100,
-                fit: BoxFit.cover,
-              ),
+              child: article['imageUrl'] != null
+                  ? Image.network(
+                      article['imageUrl']!,
+                      width: 150,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      width: 150,
+                      height: 100,
+                      color: Colors.grey,
+                      child: const Icon(Icons.image),
+                    ),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    article['title']!,
+                    article['title'] ?? 'No Title',
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
@@ -152,7 +135,7 @@ class ArticleView extends GetView<ArticleController> {
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    article['description']!,
+                    article['description'] ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 14.0),
