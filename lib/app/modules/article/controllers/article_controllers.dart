@@ -1,18 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:herba_scan/app/modules/article/providers/article_provider.dart';
 
 class ArticleController extends GetxController {
-  var articles = <Map<String, String>>[].obs; // Semua artikel
-  var filteredArticles = <Map<String, String>>[].obs; // Artikel yang difilter
-  var isLoading = true.obs;
-  var selectedImage = Rxn<File>();
-  var articleTitle = ''.obs;
-  var articleDescription = ''.obs;
-  var selectedFilter = ''.obs;
+  final ArticleProvider _articleProvider = ArticleProvider();
 
-  final ImagePicker _picker = ImagePicker();
+  // Observables
+  var isLoading = true.obs;
+  var articles = <Map<String, dynamic>>[].obs;
+  var filteredArticles = RxList<Map<String, dynamic>>([]);
+  var selectedFilter = 'terbaru'.obs;
+  var articleTitle = ''.obs;
 
   @override
   void onInit() {
@@ -20,43 +18,54 @@ class ArticleController extends GetxController {
     fetchArticles();
   }
 
-  void fetchArticles() async {
-    try {
-      isLoading(true);
-      await Future.delayed(const Duration(seconds: 1));
+  /// Mengambil daftar artikel dari provider
+  Future<void> fetchArticles() async {
+    isLoading.value = true;
 
-      articles.assignAll([
-        {
-          "title": "Daun Kemangi Bisa Buat Kaya Lho...",
-          "description": "Daun Kemangi kaya manfaat...",
-          "imageUrl": "images/diet.jpg",
-        },
-        {
-          "title": "Aloe Vera untuk Kesehatan Kulit...",
-          "description": "Aloe Vera memberikan banyak manfaat...",
-          "imageUrl": "images/diet.jpg",
-        }
-      ]);
-    } catch (error) {
-      // Log or show error messages if necessary
-      if (kDebugMode) {
-        debugPrint("Error fetching articles: $error");
-      }
-    } finally {
-      isLoading(false);
+    final response = await _articleProvider.fetchArticles();
+    if (response.statusCode == 200 && response.body != null) {
+      // Parsing data
+      final List<dynamic> data = response.body['data'] ?? [];
+      articles.assignAll(data.cast<Map<String, dynamic>>());
+      applySearchFilter(); // Terapkan filter awal
+    } else {
+      print('Error fetching articles: ${response.body}');
     }
+
+    isLoading.value = false;
   }
 
-  void filterArticles(String query) {
-    if (query.isEmpty) {
-      filteredArticles.assignAll(articles); // Tampilkan semua artikel jika pencarian kosong
-    } else {
-      filteredArticles.assignAll(
-        articles.where((article) {
-          final title = article['title']?.toLowerCase() ?? '';
-          return title.contains(query.toLowerCase());
-        }).toList(),
-      );
+  /// Memperbarui filter berdasarkan kategori
+  void updateFilter(String filter) {
+    selectedFilter.value = filter;
+    applySearchFilter();
+  }
+
+  /// Menerapkan filter pencarian dan kategori
+  void applySearchFilter() {
+    List<Map<String, dynamic>> tempArticles = articles;
+
+    // Filter pencarian
+    if (articleTitle.isNotEmpty) {
+      tempArticles = tempArticles
+          .where((article) {
+            final title = (article['title'] ?? '').toString().toLowerCase();
+            final description = (article['description'] ?? '').toString().toLowerCase();
+            return title.contains(articleTitle.value.toLowerCase()) ||
+                description.contains(articleTitle.value.toLowerCase());
+          })
+          .toList();
     }
+
+    // Filter kategori
+    if (selectedFilter.value == 'terbaru') {
+      tempArticles.sort((a, b) => b['created_at'].compareTo(a['created_at']));
+    } else if (selectedFilter.value == 'populer') {
+      tempArticles.sort((a, b) => b['views'].compareTo(a['views']));
+    } else if (selectedFilter.value == 'paling lama') {
+      tempArticles.sort((a, b) => a['created_at'].compareTo(b['created_at']));
+    }
+
+    filteredArticles.assignAll(tempArticles);
   }
 }
