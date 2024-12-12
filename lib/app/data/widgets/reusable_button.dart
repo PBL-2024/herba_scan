@@ -6,6 +6,7 @@ class ReusableButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool isLoading;
+  final double width;
   final TextStyle? textStyle;
   final ButtonStyle? buttonStyle;
 
@@ -13,6 +14,7 @@ class ReusableButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
+    this.width = double.infinity,
     this.isLoading = false,
     this.textStyle,
     this.buttonStyle,
@@ -21,7 +23,7 @@ class ReusableButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: width,
       child: ElevatedButton(
         style: buttonStyle ?? ElevatedButton.styleFrom(
           backgroundColor: Themes.buttonColor,

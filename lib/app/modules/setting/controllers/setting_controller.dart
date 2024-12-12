@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/app/data/models/response_avatar_update.dart';
 import 'package:herba_scan/app/data/models/response_user.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
+import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
 import 'package:herba_scan/app/modules/setting/bindings/setting_binding.dart';
 import 'package:herba_scan/app/modules/setting/views/change_email_view.dart';
-import 'package:herba_scan/app/routes/app_pages.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingController extends GetxController {
   final _userProvider = Get.put(UserProvider());
   final box = GetStorage();
-  late final Rx<UserResponse> user = UserResponse().obs;
   final isLoading = false.obs;
+  final userController = Get.find<UserController>();
 
   // Profile
   final nameController = TextEditingController();
@@ -31,59 +30,21 @@ class SettingController extends GetxController {
   final otpController = TextEditingController();
   final newEmailController = TextEditingController();
   final otpNewEmailController = TextEditingController();
+
   // count down timer
   final countDown = 0.obs;
-
-  // Google sign in
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  @override
-  void onInit() {
-    super.onInit();
-    getUser();
-  }
 
   @override
   void onReady() {
     super.onReady();
-    checkToken();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void checkToken() async {
-    if (box.read('token') == null){
-      confirmAuth();
+    if(!userController.checkToken()){
+      userController.confirmAuth();
+    }else{
+      nameController.text = userController.user!.value.name!;
+      emailController.text = userController.user!.value.email!;
     }
   }
 
-  void confirmAuth() {
-    Get.defaultDialog(
-      title: 'Peringatan',
-      middleText: 'Anda harus login terlebih dahulu',
-      actions: [
-        ReusableButton(
-          text: 'Login',
-          onPressed: () {
-            Get.offAllNamed(Routes.AUTH);
-          },
-        ),
-        ReusableButton(
-          text: 'Kembali',
-          buttonStyle: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red.shade700,
-            fixedSize: const Size(double.infinity, 50),
-          ),
-          onPressed: () {
-            Get.offAllNamed(Routes.HOME);
-          },
-        ),
-      ],
-    );
-  }
 
   void logout() {
     Get.bottomSheet(
@@ -132,17 +93,14 @@ class SettingController extends GetxController {
                           fixedSize: const Size(double.infinity, 50),
                         ),
                         onPressed: () async {
-                          final response =
-                              await Get.put(AuthProvider()).logout();
-                          final message = response.statusCode == 200
+                          final status = await userController.logout();
+                          status
                               ? 'Berhasil keluar'
                               : 'Gagal keluar';
                           Get.snackbar(
-                              response.statusCode == 200 ? 'Berhasil' : 'Gagal',
-                              message);
-                          if (response.statusCode == 200) {
-                            box.remove('token');
-                            await _googleSignIn.signOut();
+                              status ? 'Berhasil' : 'Gagal',
+                              'Anda telah keluar dari aplikasi');
+                          if (status) {
                             Get.offAllNamed('/home');
                           }
                         },
@@ -163,21 +121,6 @@ class SettingController extends GetxController {
     );
   }
 
-  Future<void> getUser() async {
-    try {
-      final response = await _userProvider.getUser();
-      if (response.statusCode == 200) {
-        user.value = UserResponse.fromJson(response.body);
-        nameController.text = user.value.data!.name!;
-        emailController.text = user.value.data!.email!;
-      } else {
-        throw ('Anda tidak terautentikasi');
-      }
-    } catch (e) {
-      Get.snackbar('Terjadi Kesalahan', e.toString());
-    }
-  }
-
   Future<void> changeName() async {
     isLoading.value = true;
     final Map<String, dynamic> data = {
@@ -186,7 +129,7 @@ class SettingController extends GetxController {
     _userProvider.updateUser(data).then((value) {
       if (value.statusCode == 200) {
         Get.snackbar('Berhasil', 'Nama berhasil diubah');
-        getUser();
+        userController.getUser();
       } else {
         Get.snackbar('Gagal', 'Gagal mengubah nama');
       }
@@ -258,7 +201,7 @@ class SettingController extends GetxController {
 
       Get.snackbar(
           response.statusCode == 200 ? 'Berhasil' : 'Gagal', res.message!);
-      getUser();
+      userController.getUser();
     } catch (e) {
       Get.snackbar("Gagal", "Terjadi kesalahan");
     }
@@ -312,8 +255,7 @@ class SettingController extends GetxController {
   Future<bool> verifyOtp(String email, String otp) async {
     isLoading.value = true;
     final authProvider = Get.put(AuthProvider());
-    final res =
-        await authProvider.verfiyOtp(email, otp);
+    final res = await authProvider.verfiyOtp(email, otp);
     if (res.statusCode == 200) {
       isLoading.value = false;
       return true;
@@ -327,7 +269,8 @@ class SettingController extends GetxController {
   Future<void> changeEmail() async {
     isLoading.value = true;
     // check if otp is valid
-    final isOtpValid = await verifyOtp(newEmailController.text, otpNewEmailController.text);
+    final isOtpValid =
+        await verifyOtp(newEmailController.text, otpNewEmailController.text);
     if (!isOtpValid) {
       isLoading.value = false;
       return;
@@ -342,7 +285,7 @@ class SettingController extends GetxController {
         Get.snackbar('Berhasil', 'Email berhasil diubah');
         isLoading.value = false;
         Get.offAllNamed('/setting');
-        getUser();
+        userController.getUser();
       } else {
         Get.snackbar('Gagal', userRes.message!);
       }
@@ -351,7 +294,7 @@ class SettingController extends GetxController {
   }
 
   void sendOtpToNewEmail() async {
-    if(countDown.value > 0) return;
+    if (countDown.value > 0) return;
     isLoading.value = true;
     setCountDown();
     final userProvider = Get.put(UserProvider());

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:herba_scan/app/modules/article/providers/article_provider.dart';
 
