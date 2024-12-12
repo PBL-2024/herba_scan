@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/app/data/models/auth/auth_user.dart';
+import 'package:herba_scan/app/data/models/response_error.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
 import 'package:herba_scan/app/modules/auth/views/forget_password_view.dart';
 import 'package:herba_scan/app/modules/auth/views/otp_verify_view.dart';
@@ -204,7 +205,8 @@ class AuthController extends GetxController {
   Future<void> signUp() async {
     try {
       isLoading.value = true;
-      bool otp = await verifyOtpSignUp(emailController.text, otpController.text);
+      bool otp =
+          await verifyOtpSignUp(emailController.text, otpController.text);
       if (formKey.currentState!.validate() && otp) {
         final res = await _authProvider.signUp(
           emailController.text,
@@ -216,7 +218,8 @@ class AuthController extends GetxController {
           final authRes = Auth.fromJson(res.body);
           box.write('token', authRes.data.token);
           Get.offAllNamed('/home');
-          Get.snackbar('Selamat Datang ${authRes.data.name}', 'Registrasi Berhasil');
+          Get.snackbar(
+              'Selamat Datang ${authRes.data.name}', 'Registrasi Berhasil');
         } else if (res.statusCode == 400) {
           Get.snackbar('Terjadi Kesalahan', 'Email sudah terdaftar');
         } else {
@@ -231,8 +234,6 @@ class AuthController extends GetxController {
     }
   }
 
-
-
   Future<void> sendOtp() async {
     isLoading.value = true;
     final res = await _authProvider.sendOtp(emailController.text);
@@ -242,6 +243,23 @@ class AuthController extends GetxController {
       Get.to(() => const InputOtpView(), transition: Transition.rightToLeft);
     } else {
       Get.snackbar('Terjadi Kesalahan', 'Email tidak ditemukan');
+    }
+    isLoading.value = false;
+  }
+
+  Future<void> sendOtpAuthenticatedUser() async {
+    isLoading.value = true;
+    final res =
+        await _authProvider.sendOtpAuthenticatedUser(emailController.text);
+    if (res.statusCode == 200) {
+      Get.snackbar('Berhasil', 'Kode OTP telah dikirim ke email anda');
+      Get.to(() => const InputOtpView(), transition: Transition.rightToLeft);
+    } else {
+      final error = ResponseError.fromJson(res.body);
+      if (kDebugMode) {
+        debugPrint(error.data.error);
+      }
+      Get.snackbar('Terjadi Kesalahan', error.data.error);
     }
     isLoading.value = false;
   }

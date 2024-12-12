@@ -18,6 +18,7 @@ class ProfileView extends GetView<SettingController> {
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {

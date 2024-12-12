@@ -17,18 +17,13 @@ class SettingView extends GetView<SettingController> {
 
   @override
   Widget build(BuildContext context) {
-    // final userController = Get.put(UserController());
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
-            if (Get.previousRoute.isEmpty) {
-              Get.offAllNamed('/home');
-            } else {
-              Get.back();
-            }
+            Get.offAllNamed('/home');
           },
         ),
         backgroundColor: Themes.backgroundColor,
@@ -74,8 +69,8 @@ class SettingView extends GetView<SettingController> {
                           backgroundColor: Colors.grey[200],
                           child: GetX<SettingController>(
                             builder: (controller) {
-                              final imageUrl =
-                                  controller.userController.user!.value.imageUrl;
+                              final imageUrl = controller
+                                  .userController.user!.value.imageUrl;
 
                               if (imageUrl == null || imageUrl.isEmpty) {
                                 return const Icon(
@@ -113,11 +108,13 @@ class SettingView extends GetView<SettingController> {
                         ),
                       ),
                       title: AutoSizeText(
-                        controller.userController.user!.value.name ?? 'Data tidak ditemukan',
+                        controller.userController.user!.value.name ??
+                            'Data tidak ditemukan',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: AutoSizeText(
-                        controller.userController.user!.value.email ?? 'Data tidak ditemukan',
+                        controller.userController.user!.value.email ??
+                            'Data tidak ditemukan',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade600),

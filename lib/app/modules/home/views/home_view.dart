@@ -90,7 +90,7 @@ class HomeView extends GetView<HomeController> {
                           shape: BoxShape.circle,
                           color: Colors.green.shade200,
                         ),
-                        child: const Icon(Icons.qr_code, color: Colors.white),
+                        child: const Icon(Icons.document_scanner, color: Colors.white),
                       ),
                     ),
                   ],

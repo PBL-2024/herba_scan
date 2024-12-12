@@ -18,7 +18,7 @@ class SettingController extends GetxController {
   final _userProvider = Get.put(UserProvider());
   final box = GetStorage();
   final isLoading = false.obs;
-  final userController = Get.put(UserController());
+  final userController = Get.find<UserController>();
 
   // Profile
   final nameController = TextEditingController();
@@ -36,46 +36,17 @@ class SettingController extends GetxController {
   // count down timer
   final countDown = 0.obs;
 
-  // Google sign in
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
   @override
-  void onInit() {
-    super.onInit();
-    nameController.text = userController.user!.value.name!;
-    emailController.text = userController.user!.value.email!;
-  }
-
-  void checkToken() async {
-    if (box.read('token') == null) {
-      confirmAuth();
+  void onReady() {
+    super.onReady();
+    if(!userController.checkToken()){
+      userController.confirmAuth();
+    }else{
+      nameController.text = userController.user!.value.name!;
+      emailController.text = userController.user!.value.email!;
     }
   }
 
-  void confirmAuth() {
-    Get.defaultDialog(
-      title: 'Peringatan',
-      middleText: 'Anda harus login terlebih dahulu',
-      actions: [
-        ReusableButton(
-          text: 'Login',
-          onPressed: () {
-            Get.offAllNamed(Routes.AUTH);
-          },
-        ),
-        ReusableButton(
-          text: 'Kembali',
-          buttonStyle: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red.shade700,
-            fixedSize: const Size(double.infinity, 50),
-          ),
-          onPressed: () {
-            Get.offAllNamed(Routes.HOME);
-          },
-        ),
-      ],
-    );
-  }
 
   void logout() {
     Get.bottomSheet(
@@ -124,17 +95,14 @@ class SettingController extends GetxController {
                           fixedSize: const Size(double.infinity, 50),
                         ),
                         onPressed: () async {
-                          final response =
-                              await Get.put(AuthProvider()).logout();
-                          final message = response.statusCode == 200
+                          final status = await userController.logout();
+                          status
                               ? 'Berhasil keluar'
                               : 'Gagal keluar';
                           Get.snackbar(
-                              response.statusCode == 200 ? 'Berhasil' : 'Gagal',
-                              message);
-                          if (response.statusCode == 200) {
-                            box.remove('token');
-                            await _googleSignIn.signOut();
+                              status ? 'Berhasil' : 'Gagal',
+                              'Anda telah keluar dari aplikasi');
+                          if (status) {
                             Get.offAllNamed('/home');
                           }
                         },

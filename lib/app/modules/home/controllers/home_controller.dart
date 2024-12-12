@@ -105,8 +105,18 @@ class HomeController extends GetxController {
 
   void dialogConfirmDeleteAll() {
     Get.defaultDialog(
-      title: 'Hapus Riwayat',
-      middleText: 'Apakah Anda yakin ingin menghapus semua riwayat?',
+      title: 'Hapus Semua Riwayat',
+      content: RichText(
+          text: TextSpan(
+        text: 'Apakah Anda yakin ingin menghapus semua riwayat?\n',
+        style: TextStyle(color: Colors.black),
+        children: [
+          TextSpan(
+            text: 'Tindakan ini tidak dapat dibatalkan',
+            style: TextStyle(color: Colors.red),
+          ),
+        ],
+      )),
       textConfirm: 'Ya',
       textCancel: 'Tidak',
       confirmTextColor: Colors.white,
@@ -151,7 +161,8 @@ class HomeController extends GetxController {
           .toList();
 
       // add to list
-      favorites.assignAll([...plantFavoritesWithType, ...articleFavoritesWithType]);
+      favorites
+          .assignAll([...plantFavoritesWithType, ...articleFavoritesWithType]);
     }
   }
 }

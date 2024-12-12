@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:herba_scan/app/data/models/response_user.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
@@ -10,6 +13,7 @@ import 'package:herba_scan/app/routes/app_pages.dart';
 class UserController extends GetxController {
   late final Rx<User>? user = User().obs;
   final box = GetStorage();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
   void onInit() {
@@ -27,12 +31,18 @@ class UserController extends GetxController {
     }
   }
 
-  void logout() async {
+  Future<bool> logout() async {
+    final Completer<bool> status = Completer();
     final authProvider = Get.put(AuthProvider());
     final req = await authProvider.logout();
     if (req.statusCode == 200) {
-      Get.offAllNamed('/home');
+      box.remove('token');
+      await _googleSignIn.signOut();
+      status.complete(true);
+    }else{
+      status.complete(false);
     }
+    return status.future;
   }
 
   bool checkToken() {
@@ -41,6 +51,7 @@ class UserController extends GetxController {
 
   void confirmAuth() {
     Get.defaultDialog(
+      barrierDismissible: false,
       title: 'Peringatan',
       middleText: 'Anda harus login terlebih dahulu',
       actions: [
@@ -57,7 +68,7 @@ class UserController extends GetxController {
             fixedSize: const Size(double.infinity, 50),
           ),
           onPressed: () {
-            Get.back();
+            Get.offAllNamed(Routes.HOME);
           },
         ),
       ],

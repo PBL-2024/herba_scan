@@ -5,6 +5,7 @@ import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import 'package:herba_scan/app/modules/auth/views/otp_verify_view.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {
@@ -14,6 +15,16 @@ class AuthView extends GetView<AuthController> {
   Widget build(BuildContext context) {
     final AuthController controller = Get.put(AuthController());
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_sharp),
+          onPressed: () => Get.offAllNamed(Routes.HOME),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
@@ -31,6 +42,7 @@ class AuthView extends GetView<AuthController> {
                 child: Obx(
                   () => Wrap(
                     children: [
+
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: controller.isLogin.value
@@ -167,7 +179,7 @@ class AuthView extends GetView<AuthController> {
                               if (controller.isLogin.value) {
                                 controller.signIn();
                               } else {
-                                if(await controller.sendOtpSignUp()){
+                                if (await controller.sendOtpSignUp()) {
                                   Get.to(const OtpVerifyView());
                                 }
                               }

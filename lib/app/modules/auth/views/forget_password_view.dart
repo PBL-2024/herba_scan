@@ -1,12 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
+import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
 
 class ForgetPasswordView extends GetView {
   const ForgetPasswordView({super.key});
@@ -92,7 +92,13 @@ class ForgetPasswordView extends GetView {
                                 text: 'Kirim kode',
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    controller.sendOtp();
+                                    final userController =
+                                        Get.put(UserController());
+                                    if (userController.checkToken()) {
+                                      controller.sendOtpAuthenticatedUser();
+                                    } else {
+                                      controller.sendOtp();
+                                    }
                                   }
                                 },
                                 isLoading: controller.isLoading.value,
