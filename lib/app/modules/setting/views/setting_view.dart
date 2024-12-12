@@ -9,6 +9,7 @@ import 'package:herba_scan/app/modules/setting/views/change_password_view.dart';
 import 'package:herba_scan/app/modules/setting/views/faq_view.dart';
 import 'package:herba_scan/app/modules/setting/views/profile_view.dart';
 import 'package:herba_scan/app/modules/setting/views/upload_plant_view.dart';
+import 'package:herba_scan/app/routes/app_pages.dart';
 
 import '../controllers/setting_controller.dart';
 
@@ -23,7 +24,7 @@ class SettingView extends GetView<SettingController> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
-            Get.offAllNamed('/home');
+            Get.offNamed(Routes.HOME);
           },
         ),
         backgroundColor: Themes.backgroundColor,
