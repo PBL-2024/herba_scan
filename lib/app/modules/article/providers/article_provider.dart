@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:herba_scan/config.dart';
@@ -10,31 +11,34 @@ class ArticleProvider extends GetConnect {
     if (Config.BACKEND_API_URL.isEmpty) {
       print('Error: Config.BACKEND_API_URL is not set.');
     }
-
+    final box = GetStorage();
     httpClient.baseUrl = Config.BACKEND_API_URL;
+    httpClient.addRequestModifier<Object?>((request) {
+      request.headers['Accept'] = 'application/json';
+      request.headers['Authorization'] = 'Bearer ${box.read('token')}';
+      return request;
+    });
     httpClient.timeout = const Duration(seconds: 30);
-
-    print('Initialized with baseUrl: ${httpClient.baseUrl}');
   }
 
-  /// Mengambil daftar artikel
-  Future<Response> fetchArticles() async {
-    const endpoint = '/api/v1/articles';
+  Future<Response> fetchArticles({String filter = 'terbaru'}) async {
+    String endpoint = '/api/v1/articles?filter=$filter';
 
     try {
-      print('Fetching articles from endpoint: ${httpClient.baseUrl}$endpoint');
       final response = await get(endpoint);
 
       if (response.statusCode == 200) {
-        print('Fetch successful: ${response.body}');
         return response;
       } else {
-        print(
-            'Fetch failed: Status ${response.statusCode}, Body: ${response.body}');
+        if (kDebugMode) {
+          debugPrint('Error during fetchArticles: ${response.bodyString}');
+        }
         return response;
       }
     } catch (e) {
-      print('Error during fetchArticles: $e');
+      if (kDebugMode) {
+        print('Error during fetchArticles: $e');
+      }
       return Response(statusCode: null, body: null);
     }
   }
@@ -62,7 +66,7 @@ class ArticleProvider extends GetConnect {
         '/api/v1/article/comment',
         {
           "article_id": articleId,
-          "comment": comment,
+          "komentar": comment,
         },
         contentType: 'application/json',
         headers: {'Accept': 'application/json'},

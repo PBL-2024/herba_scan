@@ -5,6 +5,7 @@ import 'package:herba_scan/app/data/Themes.dart';
 import 'package:herba_scan/app/data/models/favorite_item.dart';
 import 'package:herba_scan/app/data/models/response_user_favorites.dart';
 import 'package:herba_scan/app/data/models/riwayat_item.dart';
+import 'package:herba_scan/app/modules/article/controllers/article_controllers.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
 import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
@@ -20,6 +21,7 @@ class HomeController extends GetxController {
 
   final userController = Get.find<UserController>();
   final plantController = Get.find<PlantController>();
+  final articleController = Get.find<ArticleController>();
 
   @override
   void onInit() {
@@ -155,7 +157,7 @@ class HomeController extends GetxController {
                 id: e.id!,
                 imgPath: e.coverUrl!,
                 title: e.judul!,
-                description: e.isi!,
+                description: e.shortDesc!,
                 type: 'artikel',
               ))
           .toList();

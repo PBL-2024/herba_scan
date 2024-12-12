@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/Themes.dart';
@@ -43,82 +42,87 @@ class SettingView extends GetView<SettingController> {
           child: Center(
             child: Column(
               children: [
-                Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  elevation: 0,
-                  child: Obx(
-                    () => ListTile(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                      leading: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade400,
-                            width: 1,
+                InkWell(
+                  onTap: () {
+                    Get.to(() => ProfileView());
+                  },
+                  child: Card(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 0,
+                    child: Obx(
+                      () => ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                        leading: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey.shade400,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
                           ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(100),
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.grey[200],
-                          child: GetX<SettingController>(
-                            builder: (controller) {
-                              final imageUrl = controller
-                                  .userController.user!.value.imageUrl;
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.grey[200],
+                            child: GetX<SettingController>(
+                              builder: (controller) {
+                                final imageUrl = controller
+                                    .userController.user!.value.imageUrl;
 
-                              if (imageUrl == null || imageUrl.isEmpty) {
-                                return const Icon(
-                                  Icons.person_outlined,
-                                  size: 40,
-                                  color: Colors.grey,
+                                if (imageUrl == null || imageUrl.isEmpty) {
+                                  return const Icon(
+                                    Icons.person_outlined,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  );
+                                }
+
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                    width: 40,
+                                    height: 40,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(
+                                        Icons.person_outlined,
+                                        size: 40,
+                                        color: Colors.grey,
+                                      );
+                                    },
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
+                                  ),
                                 );
-                              }
-
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
-                                child: Image.network(
-                                  imageUrl,
-                                  fit: BoxFit.cover,
-                                  width: 40,
-                                  height: 40,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(
-                                      Icons.person_outlined,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    );
-                                  },
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      title: AutoSizeText(
-                        controller.userController.user!.value.name ??
-                            'Data tidak ditemukan',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: AutoSizeText(
-                        controller.userController.user!.value.email ??
-                            'Data tidak ditemukan',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600),
+                        title: AutoSizeText(
+                          controller.userController.user!.value.name ??
+                              'Data tidak ditemukan',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: AutoSizeText(
+                          controller.userController.user!.value.email ??
+                              'Data tidak ditemukan',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade600),
+                        ),
                       ),
                     ),
                   ),

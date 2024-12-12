@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 class UploadPlantController extends GetxController {
   final labelController = TextEditingController();
 
-  final listUnclassifiedPlant = <Plant>[].obs;
+  final listUnclassifiedPlant = <UnclassifiedPlant>[].obs;
 
   final _isProcessing = false.obs;
 
@@ -201,7 +201,7 @@ class UploadPlantController extends GetxController {
     if (res.data!.isEmpty) {
       listUnclassifiedPlant.clear();
     } else {
-      listUnclassifiedPlant.assignAll(res.data! as Iterable<Plant>);
+      listUnclassifiedPlant.assignAll(res.data! as Iterable<UnclassifiedPlant>);
     }
     await Future.delayed(Duration(seconds: 1));
     isLoading.value = false;

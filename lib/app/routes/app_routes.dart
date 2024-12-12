@@ -9,6 +9,7 @@ abstract class Routes {
   static const PLANT = _Paths.PLANT;
   static const PLANT_DETAIL = _Paths.PLANT_DETAIL;
   static const ARTICLE = _Paths.ARTICLE;
+  static const ARTICLE_DETAIL = _Paths.ARTICLE_DETAIL;
   static const FORGET_PASSWORD = _Paths.FORGET_PASSWORD;
   static const SETTING = _Paths.SETTING;
 }
@@ -21,6 +22,7 @@ abstract class _Paths {
   static const PLANT = '/plant';
   static const PLANT_DETAIL = '/plant-detail';
   static const ARTICLE = '/article';
+  static const ARTICLE_DETAIL = '/article-detail';
   static const FORGET_PASSWORD = '/forget-password';
   static const SETTING = '/setting';
 }

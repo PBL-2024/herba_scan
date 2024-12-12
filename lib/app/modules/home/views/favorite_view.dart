@@ -41,6 +41,9 @@ class FavoriteView extends GetView<HomeController> {
         if (item.type == 'tanaman') {
           Get.toNamed(Routes.PLANT_DETAIL,
               parameters: {'id': item.id.toString()});
+        } else if (item.type == 'artikel') {
+          Get.toNamed(Routes.ARTICLE_DETAIL,
+              parameters: {'id': item.id.toString()});
         }
       },
       child: Container(
@@ -93,7 +96,7 @@ class FavoriteView extends GetView<HomeController> {
                       constraints: BoxConstraints(maxHeight: 50),
                       // Adjust the height as needed
                       child: HtmlWidget(
-                        item.description,
+                        "${item.description.substring(0,200)} ...",
                         textStyle: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     )

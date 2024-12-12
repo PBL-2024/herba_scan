@@ -12,7 +12,7 @@ String unclassifiedPlantResponseToJson(UnclassifiedPlantResponse data) =>
 
 class UnclassifiedPlantResponse {
   final bool? success;
-  final List<Plant>? data;
+  final List<UnclassifiedPlant>? data;
   final String? message;
 
   UnclassifiedPlantResponse({
@@ -26,7 +26,7 @@ class UnclassifiedPlantResponse {
         success: json["success"],
         data: json["data"] == null
             ? []
-            : List<Plant>.from(json["data"]!.map((x) => Plant.fromJson(x))),
+            : List<UnclassifiedPlant>.from(json["data"]!.map((x) => UnclassifiedPlant.fromJson(x))),
         message: json["message"],
       );
 
@@ -39,7 +39,7 @@ class UnclassifiedPlantResponse {
       };
 }
 
-class Plant {
+class UnclassifiedPlant {
   final int? id;
   final int? userId;
   final String? nama;
@@ -49,7 +49,7 @@ class Plant {
   final DateTime? updatedAt;
   final String? fileUrl;
 
-  Plant({
+  UnclassifiedPlant({
     this.id,
     this.userId,
     this.nama,
@@ -60,7 +60,7 @@ class Plant {
     this.fileUrl,
   });
 
-  factory Plant.fromJson(Map<String, dynamic> json) => Plant(
+  factory UnclassifiedPlant.fromJson(Map<String, dynamic> json) => UnclassifiedPlant(
         id: json["id"],
         userId: json["user_id"],
         nama: json["nama"],
