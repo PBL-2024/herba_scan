@@ -7,7 +7,9 @@ import 'package:herba_scan/app/data/models/riwayat_item.dart';
 import 'package:herba_scan/app/modules/article/providers/article_provider.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
+import 'package:herba_scan/config.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ArticleController extends GetxController {
   final ArticleProvider _articleProvider = Get.find<ArticleProvider>();
@@ -159,7 +161,7 @@ class ArticleController extends GetxController {
         if (value.statusCode == 200) {
           final homeController = Get.find<HomeController>();
           final response = articleFavoriteFromJson(value.bodyString!);
-          Get.snackbar('Berhasil', response.message!);
+          Get.snackbar('Berhasil', response.message!,duration: const Duration(seconds: 1));
           homeController.getFavorites();
           isFavoriteArticle(articleId);
         }
@@ -279,5 +281,13 @@ class ArticleController extends GetxController {
         debugPrint('Error: $error');
       }
     });
+  }
+
+  void shareArticle(Article article) {
+    final link = '${Config.APP_URL}/artikel-detail?id=${article.id}';
+    Share.share(
+      '${article.judul}\n\n${link}',
+      subject: article.judul,
+    );
   }
 }

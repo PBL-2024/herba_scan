@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/models/response_article.dart';
+import 'package:herba_scan/app/data/widgets/reusable_app_bar.dart';
 import 'package:herba_scan/app/modules/article/controllers/article_controllers.dart';
 import 'package:herba_scan/app/routes/app_pages.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -26,7 +27,10 @@ class ArticleView extends GetView<ArticleController> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
+        appBar: ReusableAppBar(
+          onPressed: () {
+            Get.back();
+          },
           title: Text(
             'Artikel Kesehatan',
             style: TextStyle(
@@ -34,8 +38,6 @@ class ArticleView extends GetView<ArticleController> {
                   GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily,
             ),
           ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () => Get.back(),
             icon: const Icon(Icons.arrow_back_ios_sharp),
@@ -194,7 +196,8 @@ class ArticleView extends GetView<ArticleController> {
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.only(right: 18, left: 12, top: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(right: 18, left: 12, top: 10, bottom: 10),
         decoration: BoxDecoration(
           color: Themes.backgroundColor,
           borderRadius: BorderRadius.circular(16),
@@ -243,7 +246,8 @@ class ArticleView extends GetView<ArticleController> {
                         scrollDirection: Axis.vertical,
                         child: HtmlWidget(
                           article.shortDesc!,
-                          textStyle: TextStyle(fontSize: 12, color: Colors.grey),
+                          textStyle:
+                              TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ),
                     ),

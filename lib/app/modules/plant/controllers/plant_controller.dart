@@ -6,6 +6,8 @@ import 'package:herba_scan/app/data/models/riwayat_item.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
 import 'package:herba_scan/app/modules/home/providers/plant_provider.dart';
+import 'package:herba_scan/config.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PlantController extends GetxController {
   final isLoading = false.obs;
@@ -103,7 +105,8 @@ class PlantController extends GetxController {
       plantProvider.setFavorite(id).then((value) {
         if (value.statusCode == 200) {
           final response = plantFavoriteFromJson(value.bodyString!);
-          Get.snackbar('Berhasil', response.message!);
+          Get.snackbar('Berhasil', response.message!,
+              duration: const Duration(seconds: 1));
         }
         isFavorite(id);
 
@@ -126,5 +129,13 @@ class PlantController extends GetxController {
         }
       });
     }
+  }
+
+  void shareArticle(Plant plant) {
+    final link = '${Config.APP_URL}/plant-detail?id=${plant.id}';
+    Share.share(
+      '${plant.nama}\n\n${link}',
+      subject: plant.nama,
+    );
   }
 }

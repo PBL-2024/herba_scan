@@ -175,7 +175,7 @@ class UploadPlantController extends GetxController {
       isLoading.value = true;
       final response = await userProvider.postPlant(data);
       if (response.statusCode == 200) {
-        Get.snackbar("Berhasil", "Data berhasil diupload");
+        Get.snackbar("Berhasil", "Data berhasil diupload",duration: Duration(seconds: 1));
       } else {
         throw 'Periksa kembali data yang diinput';
       }

@@ -5,6 +5,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/themes.dart';
+import 'package:herba_scan/app/data/widgets/reusable_app_bar.dart';
 import 'package:herba_scan/app/modules/plant/controllers/plant_controller.dart';
 
 class PlantDetailView extends GetView<PlantController> {
@@ -26,10 +27,10 @@ class PlantDetailView extends GetView<PlantController> {
       },
       child: Scaffold(
         backgroundColor: Themes.backgroundColor,
-        appBar: AppBar(
-          backgroundColor: Themes.backgroundColor,
-          elevation: 0,
-          scrolledUnderElevation: 0,
+        appBar: ReusableAppBar(
+          onPressed: () {
+            Get.back();
+          },
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
             onPressed: () {
@@ -41,16 +42,14 @@ class PlantDetailView extends GetView<PlantController> {
               controller.detailMenu.value = 0;
             },
           ),
-          title: Text(
-            'Detail',
-            style: TextStyle(
-                color: Colors.black,
-                fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w600)
-                    .fontFamily),
-          ),
-          centerTitle: true,
-          // add favorite button
           actions: [
+            IconButton(
+              onPressed: () {
+                controller.shareArticle(controller
+                    .selectedPlant.value!);
+              },
+              icon: const Icon(Icons.share),
+            ),
             Obx(
               () => IconButton(
                 onPressed: () {
@@ -60,7 +59,9 @@ class PlantDetailView extends GetView<PlantController> {
                   controller.isFavoritePlant.value
                       ? Icons.favorite
                       : Icons.favorite_border,
-                  color: Colors.red,
+                  color: controller.isFavoritePlant.value
+                      ? Colors.red
+                      : Colors.black,
                 ),
               ),
             ),
@@ -69,9 +70,7 @@ class PlantDetailView extends GetView<PlantController> {
         body: Obx(
           () {
             if (controller.isLoading.value) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return _buildSkeleton();
             } else if (controller.selectedPlant.value?.id != null) {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -315,6 +314,61 @@ class PlantDetailView extends GetView<PlantController> {
               fontWeight: FontWeight.bold,
               color: Colors.grey,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildSkeleton() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 180,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade400,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
           ),
         ],
       ),

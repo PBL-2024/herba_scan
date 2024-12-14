@@ -4,6 +4,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/models/response_article_comment.dart';
+import 'package:herba_scan/app/data/widgets/reusable_app_bar.dart';
 import 'package:herba_scan/app/modules/article/controllers/article_controllers.dart';
 
 class ArticleDetailView extends GetView<ArticleController> {
@@ -26,19 +27,10 @@ class ArticleDetailView extends GetView<ArticleController> {
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFE7F9E0), // Set background color
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: const Color(0xFFE7F9E0),
-          // AppBar background color
-          title: Text(
-            'Detail Artikel',
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily:
-                  GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily,
-            ),
-          ),
-          centerTitle: true,
+        appBar: ReusableAppBar(
+          onPressed: () {
+            Get.back();
+          },
           leading: IconButton(
             onPressed: () {
               Get.back();
@@ -46,6 +38,13 @@ class ArticleDetailView extends GetView<ArticleController> {
             icon: const Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
           ),
           actions: [
+            IconButton(
+              onPressed: () {
+                controller.shareArticle(controller
+                    .selectedArticle.value);
+              },
+              icon: const Icon(Icons.share),
+            ),
             IconButton(
               onPressed: () {
                 controller.addFavoriteArticle(id!);
@@ -68,9 +67,7 @@ class ArticleDetailView extends GetView<ArticleController> {
         body: Obx(
           () {
             if (controller.isLoading.value) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return _buildSkeleton();
             } else if (controller.selectedArticle.value.id != null) {
               return SingleChildScrollView(
                 child: Padding(
@@ -122,11 +119,12 @@ class ArticleDetailView extends GetView<ArticleController> {
                                         color: Colors.grey, size: 16),
                                     const SizedBox(width: 4),
                                     Text(
-                                        controller
-                                            .selectedArticle.value.totalView
-                                            .toString(),
-                                        style: const TextStyle(
-                                            color: Colors.grey)),
+                                      controller
+                                          .selectedArticle.value.totalView
+                                          .toString(),
+                                      style: const TextStyle(
+                                          color: Colors.grey),
+                                    ),
                                   ],
                                 )
                               ],
@@ -281,7 +279,9 @@ class ArticleDetailView extends GetView<ArticleController> {
       highlightColor: Colors.transparent,
       onLongPress: comment.myComment!
           ? () {
-              controller.showDialogDeleteComment(controller.selectedArticle.value.id.toString(), comment.id.toString());
+              controller.showDialogDeleteComment(
+                  controller.selectedArticle.value.id.toString(),
+                  comment.id.toString());
             }
           : null,
       child: Container(
@@ -335,6 +335,61 @@ class ArticleDetailView extends GetView<ArticleController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _buildSkeleton() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 180,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade400,
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            height: 16,
+            color: Colors.grey.shade400,
+          ),
+        ],
       ),
     );
   }

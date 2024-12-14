@@ -4,4 +4,5 @@ class Config {
   static const String BACKEND_API_URL = '';
   static const String BACKEND_API_KEY = '';
   static const String MODEL_URL = '';
+  static const String APP_URL = '';
 }
