@@ -284,7 +284,7 @@ class ArticleController extends GetxController {
   }
 
   void shareArticle(Article article) {
-    final link = '${Config.APP_URL}/artikel-detail?id=${article.id}';
+    final link = '${Config.APP_URL}/article-detail?id=${article.id}';
     Share.share(
       '${article.judul}\n\n${link}',
       subject: article.judul,
