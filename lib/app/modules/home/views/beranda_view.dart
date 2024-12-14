@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/models/plant_response.dart';
 import 'package:herba_scan/app/data/models/response_article.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
@@ -19,6 +19,7 @@ class BerandaView extends GetView<HomeController> {
     return Expanded(
       child: RefreshIndicator(
         onRefresh: () async {
+          controller.userController.getUser();
           controller.plantController.getPlant();
           controller.articleController.fetchArticles();
           await Future.delayed(const Duration(seconds: 1));
@@ -267,7 +268,7 @@ class BerandaView extends GetView<HomeController> {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: HtmlWidget(
-                          article.shortDesc!,
+                            "${article.shortDesc?.substring(0, 150)} ...",
                           textStyle: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ),

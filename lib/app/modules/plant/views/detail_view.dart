@@ -4,7 +4,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/modules/plant/controllers/plant_controller.dart';
 
 class PlantDetailView extends GetView<PlantController> {

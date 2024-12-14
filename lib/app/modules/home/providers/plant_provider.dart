@@ -23,4 +23,6 @@ class PlantProvider extends GetConnect {
   Future<Response> setFavorite(int id) => post('/api/v1/plant/favorite', {'plant_id': id});
 
   Future<Response> isFavorite(int id) => post('/api/v1/plant/is-favorite', {'plant_id': id});
+
+  Future<Response> getPlantByName(String name) => get('/api/v1/plant/name/$name');
 }

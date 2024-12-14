@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import 'package:herba_scan/app/modules/auth/controllers/auth_controller.dart';
@@ -107,8 +107,9 @@ class OtpVerifyView extends GetView {
                                         ? 'Kirim Ulang Kode OTP'
                                         : 'Kirim Ulang Kode OTP (${controller.countDown.value})',
                                     onPressed: () {
-                                      if (controller.countDown.value != 0)
+                                      if (controller.countDown.value != 0) {
                                         return;
+                                      }
                                       controller.sendOtpSignUp();
                                     },
                                     buttonStyle: ElevatedButton.styleFrom(

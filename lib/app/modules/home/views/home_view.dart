@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/modules/home/views/beranda_view.dart';
@@ -16,7 +16,7 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(top: 16.0,left: 16.0,right: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

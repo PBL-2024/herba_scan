@@ -28,11 +28,6 @@ class UploadPlantController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {
     labelController.dispose();
     super.onClose();

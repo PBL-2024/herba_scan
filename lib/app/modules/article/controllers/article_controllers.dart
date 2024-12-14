@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 class ArticleController extends GetxController {
   final ArticleProvider _articleProvider = Get.find<ArticleProvider>();
   final isLoading = true.obs;
+  final sendCommentLoading = false.obs;
   final isFavorite = false.obs;
   final RxList<Article> articles = <Article>[].obs;
   final RxList<Comment> comments = <Comment>[].obs;
@@ -213,14 +214,61 @@ class ArticleController extends GetxController {
       Get.snackbar('Gagal', 'Komentar tidak boleh kosong');
       return;
     }
+    sendCommentLoading.value = true;
     _articleProvider.addComment(articleId, comment).then(
       (value) {
         if (value.statusCode == 200) {
-          Get.snackbar('Berhasil', 'Komentar berhasil ditambahkan');
+          Get.snackbar('Berhasil', 'Komentar berhasil ditambahkan',
+              duration: const Duration(seconds: 1));
           commentController.clear();
           fetchComments(articleId);
         } else {
-          Get.snackbar('Gagal', 'Gagal mengirim komentar');
+          Get.snackbar('Gagal', 'Gagal mengirim komentar',
+              duration: const Duration(seconds: 1));
+          if (kDebugMode) {
+            debugPrint('Error: ${value.bodyString}');
+          }
+        }
+        sendCommentLoading.value = false;
+      },
+    ).onError((error, stackTrace) {
+      if (kDebugMode) {
+        debugPrint('Error: $error');
+      }
+      sendCommentLoading.value = false;
+    });
+  }
+
+  void showDialogDeleteComment(String articleId, String commentId) {
+    Get.defaultDialog(
+      title: 'Hapus Komentar',
+      middleText: 'Apakah Anda yakin ingin menghapus komentar ini?',
+      textConfirm: 'Ya',
+      textCancel: 'Tidak',
+      confirmTextColor: Colors.white,
+      buttonColor: Colors.red,
+      onConfirm: () async {
+        deleteComment(articleId, commentId);
+        Get.back();
+        await Future.delayed(const Duration(seconds: 1));
+        Get.back();
+      },
+      onWillPop: () async {
+        return true;
+      },
+    );
+  }
+
+  void deleteComment(String articleId, String commentId) {
+    _articleProvider.deleteComment(articleId, commentId).then(
+      (value) {
+        if (value.statusCode == 200) {
+          Get.snackbar('Berhasil', 'Komentar berhasil dihapus',
+              duration: const Duration(seconds: 1));
+          fetchComments(articleId);
+        } else {
+          Get.snackbar('Gagal', 'Gagal menghapus komentar',
+              duration: const Duration(seconds: 1));
           if (kDebugMode) {
             debugPrint('Error: ${value.bodyString}');
           }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/widgets/custom_expansion.dart';
 import 'package:herba_scan/app/modules/setting/controllers/faq_controller.dart';
 

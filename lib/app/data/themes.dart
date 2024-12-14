@@ -6,4 +6,5 @@ class Themes {
   static const Color textGreenColor = Color(0xff2D6914);
   static const Color backgroundColor = Color(0xffE7F9E0);
   static const Color backgroundColor2 = Color(0xFFb9eaa4);
+  static const Color buttonCameraBackground = Color(0xB244A71A);
 }

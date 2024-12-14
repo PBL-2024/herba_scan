@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -9,7 +11,9 @@ class ArticleProvider extends GetConnect {
   void onInit() {
     // Validasi base URL
     if (Config.BACKEND_API_URL.isEmpty) {
-      print('Error: Config.BACKEND_API_URL is not set.');
+      if (kDebugMode) {
+        print('Error: Config.BACKEND_API_URL is not set.');
+      }
     }
     final box = GetStorage();
     httpClient.baseUrl = Config.BACKEND_API_URL;
@@ -73,10 +77,15 @@ class ArticleProvider extends GetConnect {
       );
 
   /// Menghapus komentar berdasarkan ID
-  Future<Response> deleteComment(String commentId) => delete(
-        '/api/v1/article/comment/$commentId',
-        headers: {'Accept': 'application/json'},
-      );
+  Future<Response> deleteComment(String articleId, String commentId) async {
+    final url = '/api/v1/article/comment/$articleId/$commentId';
+    final res = await delete(
+      url,
+      headers: {'Accept': 'application/json'},
+    );
+
+    return res;
+  }
 
   /// Menandai artikel sebagai favorit
   Future<Response> markAsFavorite(String articleId) => post(

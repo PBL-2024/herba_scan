@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/models/riwayat_item.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/routes/app_pages.dart';
@@ -14,22 +16,19 @@ class RiwayatView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Obx(
-                () => controller.riwayat.isNotEmpty
-                    ? Column(
-                        children: controller.riwayat
-                            .map((e) => _buildRiwayatCard(e))
-                            .toList(),
-                      )
-                    : _emptyRiwayat(),
-              )
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Obx(
+              () => controller.riwayat.isNotEmpty
+                  ? Column(
+                      children: controller.riwayat
+                          .map((e) => _buildRiwayatCard(e))
+                          .toList(),
+                    )
+                  : _emptyRiwayat(),
+            )
+          ],
         ),
       ),
     );
@@ -37,13 +36,16 @@ class RiwayatView extends GetView<HomeController> {
 
   Widget _buildRiwayatCard(RiwayatItem item) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (item.type == 'tanaman') {
           Get.toNamed(Routes.PLANT_DETAIL,
               parameters: {'id': item.id.toString()});
-        }else if (item.type == 'artikel') {
+        } else if (item.type == 'artikel') {
           Get.toNamed(Routes.ARTICLE_DETAIL,
               parameters: {'id': item.id.toString()});
+        }else if (item.type == 'scan'){
+          await controller.openRiwayatScan(item);
+          Get.toNamed(Routes.SCAN_RESULT);
         }
       },
       onDoubleTap: () {
@@ -81,8 +83,8 @@ class RiwayatView extends GetView<HomeController> {
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: Image.asset(
-                        item.imgPath,
+                      child: Image.file(
+                        File(item.imgPath),
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -112,7 +114,7 @@ class RiwayatView extends GetView<HomeController> {
                       constraints: BoxConstraints(maxHeight: 50),
                       // Adjust the height as needed
                       child: HtmlWidget(
-                        "${item.description.substring(0,200)} ...",
+                        controller.cutDescription(item.description),
                         textStyle: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     )

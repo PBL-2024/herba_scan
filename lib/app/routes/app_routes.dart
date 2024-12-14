@@ -12,6 +12,8 @@ abstract class Routes {
   static const ARTICLE_DETAIL = _Paths.ARTICLE_DETAIL;
   static const FORGET_PASSWORD = _Paths.FORGET_PASSWORD;
   static const SETTING = _Paths.SETTING;
+  static const SCAN_RESULT = _Paths.SCAN_RESULT;
+  static const UPLOAD_PLANT = _Paths.UPLOAD_PLANT;
 }
 
 abstract class _Paths {
@@ -25,4 +27,6 @@ abstract class _Paths {
   static const ARTICLE_DETAIL = '/article-detail';
   static const FORGET_PASSWORD = '/forget-password';
   static const SETTING = '/setting';
+  static const SCAN_RESULT = '/scan-result';
+  static const UPLOAD_PLANT = '/upload-plant';
 }

@@ -15,16 +15,6 @@ class FaqController extends GetxController {
     getFaqs();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   void getFaqs() async {
     try {
       final response = await _faqProvider.getFaqs();

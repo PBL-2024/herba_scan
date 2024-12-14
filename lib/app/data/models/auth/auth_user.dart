@@ -4,9 +4,9 @@
 
 import 'dart:convert';
 
-Auth AuthFromJson(String str) => Auth.fromJson(json.decode(str));
+Auth authFromJson(String str) => Auth.fromJson(json.decode(str));
 
-String AuthToJson(Auth data) => json.encode(data.toJson());
+String authToJson(Auth data) => json.encode(data.toJson());
 
 class Auth {
   final bool success;

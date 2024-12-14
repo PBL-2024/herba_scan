@@ -1,14 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:herba_scan/app/data/Themes.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/models/favorite_item.dart';
+import 'package:herba_scan/app/data/models/plant_response.dart';
 import 'package:herba_scan/app/data/models/response_user_favorites.dart';
 import 'package:herba_scan/app/data/models/riwayat_item.dart';
 import 'package:herba_scan/app/modules/article/controllers/article_controllers.dart';
 import 'package:herba_scan/app/modules/auth/providers/auth_provider.dart';
 import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
+import 'package:herba_scan/app/modules/home/providers/plant_provider.dart';
 import 'package:herba_scan/app/modules/home/providers/user_provider.dart';
+import 'package:herba_scan/app/modules/leaf-scan/controllers/leaf_scan_controller.dart';
 import 'package:herba_scan/app/modules/plant/controllers/plant_controller.dart';
 
 class HomeController extends GetxController {
@@ -166,5 +171,26 @@ class HomeController extends GetxController {
       favorites
           .assignAll([...plantFavoritesWithType, ...articleFavoritesWithType]);
     }
+  }
+
+  String cutDescription(String description) {
+    if (description.length > 150) {
+      return '${description.substring(0, 150)}...';
+    } else {
+      return description;
+    }
+  }
+
+  Future<void> openRiwayatScan(RiwayatItem item) async {
+    final scanController = Get.put(LeafScanController());
+    Completer<void> completer = Completer();
+    scanController.showLoadingOverLay(asyncFunction: () async {
+      final plantProvider = Get.find<PlantProvider>();
+      final req = await plantProvider.getPlantById(item.id);
+      final res = SinglePlantResponse.fromJson(req.body);
+      scanController.capturedImage.value = item.imgPath;
+      scanController.plant.value = res.data!;
+    });
+    completer.complete();
   }
 }

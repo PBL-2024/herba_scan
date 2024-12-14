@@ -42,6 +42,7 @@ dependencies:
   flutter_image_compress: ^2.3.0
   intl: ^0.19.0
   skeletonizer: ^1.4.2
+  path_provider: ^2.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -67,21 +68,6 @@ flutter:
   assets:
     - assets/images/
     - assets/images/icons/
-    - images/kemangi.jpg
-    - images/imunitas.jpg
-    - images/teh_hijau.png
-    - images/Stres.png
-    - images/makanan_sehat.jpg
-    - images/olahraga.jpg
-    - images/yoga.jpg
-    - images/Tidur-Nyenyak.jpg
-    - images/meditasi.jpg
-    - images/diet.jpg
-    - images/insomnia.jpg
-    - images/hidup_sehat.jpg
-    - images/mental_health.jpeg
-    - images/makanan_mood.jpg
-    - images/kebiasaan_pagi.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

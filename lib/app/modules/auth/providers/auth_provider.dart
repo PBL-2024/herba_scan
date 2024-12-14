@@ -36,11 +36,11 @@ class AuthProvider extends GetConnect {
   }
 
   Future<Response> signUp(
-      String email, String password, String c_password, String name) async {
+      String email, String password, String cPassword, String name) async {
     final res = await post('/api/v1/auth/register', {
       'email': email,
       'password': password,
-      'c_password': c_password,
+      'c_password': cPassword,
       'name': name
     });
     return res;
@@ -73,12 +73,12 @@ class AuthProvider extends GetConnect {
   }
 
   Future<Response> changePassword(
-      String email, String token, String password, String c_password) async {
+      String email, String token, String password, String cPassword) async {
     final res = await post('/api/v1/auth/change-password', {
       'email': email,
       'token': token,
       'password': password,
-      'c_password': c_password
+      'c_password': cPassword
     });
     return res;
   }

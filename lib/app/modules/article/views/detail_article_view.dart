@@ -198,15 +198,33 @@ class ArticleDetailView extends GetView<ArticleController> {
                             Container(
                               decoration: const BoxDecoration(
                                 color: Colors.green,
-                                shape: BoxShape.circle,
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
                               ),
-                              child: IconButton(
-                                onPressed: () {
-                                  controller.sendComment(
-                                      id!, controller.commentController.text);
-                                },
-                                icon:
-                                    const Icon(Icons.send, color: Colors.white),
+                              child: SizedBox(
+                                height: 48,
+                                width: 48,
+                                child: controller.sendCommentLoading.value
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2.0,
+                                        ),
+                                      )
+                                    : IconButton(
+                                        onPressed: () {
+                                          controller.sendComment(
+                                              id!,
+                                              controller
+                                                  .commentController.text);
+                                        },
+                                        icon: const Icon(
+                                          Icons.send,
+                                          size: 25,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                             ),
                           ],
@@ -258,47 +276,65 @@ class ArticleDetailView extends GetView<ArticleController> {
   }
 
   Widget _buildCommentSection(Comment comment) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundImage: comment.user?.imageUrl != null
-                ? NetworkImage(comment.user!.imageUrl!)
-                : null,
-            backgroundColor: Colors.transparent,
-            child: comment.user?.imageUrl == null ? Icon(Icons.person) : null,
-          ),
-          const SizedBox(width: 8.0),
-          // Comment Content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      focusColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onLongPress: comment.myComment!
+          ? () {
+              controller.showDialogDeleteComment(controller.selectedArticle.value.id.toString(), comment.id.toString());
+            }
+          : null,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(comment.user!.name!,
-                        style: TextStyle(
-                            fontFamily:
-                                GoogleFonts.poppins(fontWeight: FontWeight.w600)
-                                    .fontFamily)),
-                    Text(controller.formatDate(comment.createdAt!),
-                        style: const TextStyle(color: Colors.grey)),
-                  ],
+                CircleAvatar(
+                  backgroundImage: comment.user?.imageUrl != null
+                      ? NetworkImage(comment.user!.imageUrl!)
+                      : null,
+                  backgroundColor: Colors.transparent,
+                  child: comment.user?.imageUrl == null
+                      ? Icon(Icons.person)
+                      : null,
                 ),
-                const SizedBox(height: 4.0),
-                Text(comment.komentar!),
+                const SizedBox(width: 8.0),
+                // Comment Content
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(comment.user!.name!,
+                          style: TextStyle(
+                              fontFamily: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w600)
+                                  .fontFamily)),
+                      Row(
+                        children: [
+                          Text(controller.formatDate(comment.createdAt!),
+                              style: const TextStyle(color: Colors.grey)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 10.0),
+            Text(
+              comment.komentar!,
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }
