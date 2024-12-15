@@ -32,7 +32,7 @@ class ScanResultView extends GetView<LeafScanController> {
                   child: Image.file(
                     fit: BoxFit.cover,
                     height: Get.height * 0.7,
-                    File(controller.capturedImage.value ?? ''),
+                    File(controller.capturedImage.value),
                   ),
                 ),
               ),
