@@ -20,7 +20,6 @@ class PlantView extends GetView<PlantController> {
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) {
           controller.seachController.clear();
-          controller.selectedPlant.value = null;
           controller.detailMenu.value = 0;
           controller.getPlant();
         }

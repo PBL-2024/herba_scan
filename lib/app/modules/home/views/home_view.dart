@@ -15,13 +15,13 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16.0,left: 16.0,right: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+              child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
@@ -103,10 +103,13 @@ class HomeView extends GetView<HomeController> {
                   ],
                 ),
               ),
+            ),
 
-              const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
-              Container(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
                 decoration: BoxDecoration(
@@ -140,26 +143,26 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
               ),
-              // Tab Bar
+            ),
+            // Tab Bar
 
-              const SizedBox(height: 15),
+            const SizedBox(height: 15),
 
-              // Content
-              Obx(
-                () {
-                  if (controller.activeTab.value == "Beranda") {
-                    return const BerandaView();
-                  } else if (controller.activeTab.value == "Riwayat") {
-                    return const RiwayatView();
-                  } else if (controller.activeTab.value == "Favorit") {
-                    return const FavoriteView();
-                  } else {
-                    return Container(); // Default case
-                  }
-                },
-              )
-            ],
-          ),
+            // Content
+            Obx(
+              () {
+                if (controller.activeTab.value == "Beranda") {
+                  return const BerandaView();
+                } else if (controller.activeTab.value == "Riwayat") {
+                  return const RiwayatView();
+                } else if (controller.activeTab.value == "Favorit") {
+                  return const FavoriteView();
+                } else {
+                  return Container(); // Default case
+                }
+              },
+            )
+          ],
         ),
       ),
     );

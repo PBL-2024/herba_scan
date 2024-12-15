@@ -46,7 +46,7 @@ class LeafScanController extends GetxController {
 
   Future<void> initializeCamera() async {
     cameras = await availableCameras();
-    cameraController = CameraController(cameras[0], ResolutionPreset.low);
+    cameraController = CameraController(cameras[0], ResolutionPreset.high);
     await cameraController.initialize();
     isCameraReady.value = true;
   }

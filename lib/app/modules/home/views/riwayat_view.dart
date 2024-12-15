@@ -16,19 +16,22 @@ class RiwayatView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Obx(
-              () => controller.riwayat.isNotEmpty
-                  ? Column(
-                      children: controller.riwayat
-                          .map((e) => _buildRiwayatCard(e))
-                          .toList(),
-                    )
-                  : _emptyRiwayat(),
-            )
-          ],
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Obx(
+                () => controller.riwayat.isNotEmpty
+                    ? Column(
+                        children: controller.riwayat
+                            .map((e) => _buildRiwayatCard(e))
+                            .toList(),
+                      )
+                    : _emptyRiwayat(),
+              )
+            ],
+          ),
         ),
       ),
     );

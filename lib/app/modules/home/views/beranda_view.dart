@@ -29,7 +29,10 @@ class BerandaView extends GetView<HomeController> {
           // scrollDirection: Axis.vertical,
           child: Column(
             children: [
-              _buildSectionTitle("Tanaman", Routes.PLANT),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: _buildSectionTitle("Tanaman", Routes.PLANT),
+              ),
               const SizedBox(height: 16),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -42,13 +45,16 @@ class BerandaView extends GetView<HomeController> {
                             3, (index) => _buildSkeletonPlantCard()),
                       );
                     } else {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: controller.plantController.plants
-                            .take(4)
-                            .map((plant) {
-                          return _buildPlantCard(plant);
-                        }).toList(),
+                      return Container(
+                        margin: const EdgeInsets.only(left: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: controller.plantController.plants
+                              .take(4)
+                              .map((plant) {
+                            return _buildPlantCard(plant);
+                          }).toList(),
+                        ),
                       );
                     }
                   },
@@ -56,7 +62,10 @@ class BerandaView extends GetView<HomeController> {
               ),
               const SizedBox(height: 24),
               // Section: Artikel Kesehatan
-              _buildSectionTitle("Artikel Kesehatan", Routes.ARTICLE),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: _buildSectionTitle("Artikel Kesehatan", Routes.ARTICLE),
+              ),
               const SizedBox(height: 24),
               Obx(
                 () {
@@ -68,12 +77,15 @@ class BerandaView extends GetView<HomeController> {
                       ),
                     );
                   } else {
-                    return Column(
-                      children: controller.articleController.articles
-                          .take(3)
-                          .map((article) {
-                        return _buildArticleCard(article);
-                      }).toList(),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: controller.articleController.articles
+                            .take(3)
+                            .map((article) {
+                          return _buildArticleCard(article);
+                        }).toList(),
+                      ),
                     );
                   }
                 },

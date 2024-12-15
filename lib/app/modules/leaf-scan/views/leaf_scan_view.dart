@@ -93,11 +93,16 @@ class LeafScanView extends GetView<LeafScanController> {
                         backgroundColor: Themes.buttonCameraBackground,
                       ),
                       onPressed: () async {
-                        final image = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery,maxHeight: 500,maxWidth: 500);
-                        if (image != null) {
-                          controller.predictImage(image);
-                        }
+                        controller.showLoadingOverLay(asyncFunction: () async {
+                          final image = await ImagePicker().pickImage(
+                            source: ImageSource.gallery,
+                            maxHeight: 500,
+                            maxWidth: 500,
+                          );
+                          if (image != null) {
+                            controller.predictImage(image);
+                          }
+                        });
                       },
                       child: Icon(Icons.image,
                           color: Themes.backgroundColor, size: 30),

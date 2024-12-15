@@ -21,52 +21,54 @@ class ScanResultView extends GetView<LeafScanController> {
         },
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.file(
-                  fit: BoxFit.cover,
-                  height: Get.height * 0.7,
-                  File(controller.capturedImage.value),
+      body: Obx(
+        () => Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.file(
+                    fit: BoxFit.cover,
+                    height: Get.height * 0.7,
+                    File(controller.capturedImage.value ?? ''),
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(20.0),
-            margin: const EdgeInsets.all(20.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.5),
-                  spreadRadius: 10,
-                  blurRadius: 20,
-                  // offset: Offset(0, 0), // changes position of shadow
-                ),
-              ],
-            ),
-            child: Obx(
-              () => Row(
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              margin: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.green.withOpacity(0.5),
+                    spreadRadius: 10,
+                    blurRadius: 20,
+                    // offset: Offset(0, 0), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      controller.plant.value.coverUrl!,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  controller.plant.value.coverUrl == null
+                      ? const CircularProgressIndicator()
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            controller.plant.value.coverUrl ?? '',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                   AutoSizeText(
                     softWrap: true,
-                    controller.plant.value.nama!,
+                    controller.plant.value.nama ?? '',
                     style: TextStyle(
                       fontFamily:
                           GoogleFonts.poppins(fontWeight: FontWeight.bold)
@@ -127,8 +129,8 @@ class ScanResultView extends GetView<LeafScanController> {
                 ],
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
