@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/widgets/camera_style.dart';
 import 'package:herba_scan/app/data/widgets/reusable_app_bar.dart';
+import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../controllers/leaf_scan_controller.dart';
 
 class LeafScanView extends GetView<LeafScanController> {
@@ -18,6 +21,51 @@ class LeafScanView extends GetView<LeafScanController> {
         onPressed: () {
           Get.back();
         },
+        actions: [
+          PopupMenuButton(
+            color: Colors.white,
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  textStyle: GoogleFonts.poppins(color: Colors.black),
+                  labelTextStyle: WidgetStateProperty.all(
+                    GoogleFonts.poppins(color: Colors.black),
+                  ),
+                  value: 'threshold',
+                  child: const Text('Ubah Threshold Confidence'),
+                ),
+              ];
+            },
+            onSelected: (value) {
+              if (value == 'threshold') {
+                Get.defaultDialog(
+                  title: 'Ubah Threshold',
+                  content: Obx(
+                    () => Column(
+                      children: [
+                        Text(
+                            'Threshold : ${controller.threshold.value * 100 ~/ 1}%'),
+                        Slider(
+                          thumbColor: Colors.green,
+                          activeColor: Colors.green,
+                          value: controller.threshold.value,
+                          onChanged: (value) {
+                            controller.threshold.value = value;
+                          },
+                          min: 0,
+                          max: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    ReusableButton(text: 'Simpan', onPressed: () => Get.back()),
+                  ],
+                );
+              }
+            },
+          ),
+        ],
       ),
       body: Obx(
         () => Column(
@@ -37,7 +85,7 @@ class LeafScanView extends GetView<LeafScanController> {
                           decoration: ShapeDecoration(
                             shape: QrScannerOverlayShape(
                               borderColor: Colors.black,
-                              overlayColor: Colors.white.withOpacity(0.7),
+                              overlayColor: Colors.white.withValues(alpha: 0.7),
                               borderRadius: 20,
                               borderLength: 40,
                               borderWidth: 10,

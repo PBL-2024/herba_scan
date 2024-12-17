@@ -6,6 +6,7 @@ import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/data/widgets/reusable_input_field.dart';
 import 'package:herba_scan/app/modules/auth/views/otp_verify_view.dart';
 import 'package:herba_scan/app/routes/app_pages.dart';
+
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {

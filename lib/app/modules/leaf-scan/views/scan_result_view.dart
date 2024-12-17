@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/widgets/reusable_app_bar.dart';
@@ -45,7 +44,7 @@ class ScanResultView extends GetView<LeafScanController> {
                 borderRadius: BorderRadius.all(Radius.circular(30)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.green.withOpacity(0.5),
+                    color: Colors.green.withValues(alpha: 0.5),
                     spreadRadius: 10,
                     blurRadius: 20,
                     // offset: Offset(0, 0), // changes position of shadow

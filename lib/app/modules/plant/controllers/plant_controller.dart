@@ -134,7 +134,7 @@ class PlantController extends GetxController {
   void shareArticle(Plant plant) {
     final link = '${Config.APP_URL}/plant-detail?id=${plant.id}';
     Share.share(
-      '${plant.nama}\n\n${link}',
+      '${plant.nama}\n\n$link',
       subject: plant.nama,
     );
   }

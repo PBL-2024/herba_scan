@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/models/plant_response.dart';
 import 'package:herba_scan/app/data/models/response_prediction.dart'
     as prediction;
 import 'package:herba_scan/app/data/models/riwayat_item.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/widgets/reusable_button.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/modules/home/controllers/user_controller.dart';
@@ -31,6 +31,7 @@ class LeafScanController extends GetxController {
   final userController = Get.find<UserController>();
   final plant = Plant().obs;
   final homeController = Get.find<HomeController>();
+  final threshold = 0.8.obs;
 
   @override
   void onReady() {
@@ -69,7 +70,7 @@ class LeafScanController extends GetxController {
 
   Future<void> _handlePredictionResponse(Response response, XFile file) async {
     final result = prediction.Prediction.fromJson(response.body);
-    if (result.images[0].results[0].confidence < 0.9) {
+    if (result.images[0].results[0].confidence < threshold.value) {
       _handleLowConfidence();
     } else {
       await _saveAndProcessImage(file, result.images[0].results[0].name);
@@ -95,7 +96,8 @@ class LeafScanController extends GetxController {
   }
 
   Future<String> _saveImage(XFile file) async {
-    final String path = await getApplicationDocumentsDirectory().then((value) => value.path);
+    final String path =
+        await getApplicationDocumentsDirectory().then((value) => value.path);
     final Directory dir = Directory('$path/scan-history');
     if (!dir.existsSync()) {
       dir.createSync();

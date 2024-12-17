@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/data/models/favorite_item.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/routes/app_pages.dart';
 

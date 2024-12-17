@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:herba_scan/app/data/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:herba_scan/app/data/themes.dart';
 import 'package:herba_scan/app/modules/home/controllers/home_controller.dart';
 import 'package:herba_scan/app/modules/home/views/beranda_view.dart';
 import 'package:herba_scan/app/modules/home/views/favorite_view.dart';
