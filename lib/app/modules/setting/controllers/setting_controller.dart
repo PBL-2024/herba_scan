@@ -226,7 +226,7 @@ class SettingController extends GetxController {
     newPasswordController.clear();
   }
 
-  Future<void> sendOtp() async {
+  Future<void> sendOtp(String otp) async {
     isLoading.value = true;
     final authProvider = Get.put(AuthProvider());
     final userProvider = Get.put(UserProvider());
@@ -234,13 +234,13 @@ class SettingController extends GetxController {
     final responseUser = await userProvider.getUser();
     final user = UserResponse.fromJson(responseUser.body);
 
-    if (emailController.text != user.data!.email) {
+    if (otp != user.data!.email) {
       Get.snackbar('Terjadi Kesalahan', 'Email tidak sesuai');
       isLoading.value = false;
       return;
     }
 
-    final res = await authProvider.sendOtp(emailController.text);
+    final res = await authProvider.sendOtp(otp);
 
     if (res.statusCode == 200) {
       Get.snackbar('Berhasil', 'Kode OTP telah dikirim ke email anda');

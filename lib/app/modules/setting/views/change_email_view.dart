@@ -13,96 +13,107 @@ class ChangeEmailView extends GetView<SettingController> {
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    return Scaffold(
-      backgroundColor: Themes.backgroundColor,
-      appBar: AppBar(
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          controller.emailController.text =
+              controller.userController.user!.value.email!;
+          controller.nameController.text =
+              controller.userController.user!.value.name!;
+        }
+      },
+      child: Scaffold(
         backgroundColor: Themes.backgroundColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_sharp),
-          onPressed: () {
-            Get.back();
-          },
+        appBar: AppBar(
+          backgroundColor: Themes.backgroundColor,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_sharp),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          title: Text(
+            'Ubah E-mail',
+            style: TextStyle(
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
         ),
-        title: Text(
-          'Ubah E-mail',
-          style: TextStyle(
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              const SizedBox(
-                height: 20,
-              ),
-              AutoSizeText(
-                'Masukkan E-mail untuk mendapatkan kode OTP',
-                style: TextStyle(
-                    fontFamily: GoogleFonts.poppins().fontFamily,
-                    fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    children: [
-                      Image.asset('assets/images/forgot_password.png'),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            Form(
-                              key: formKey,
-                              child: ReusableInputField(
-                                title: 'Masukkan E-mail lama',
-                                controller: controller.emailController,
-                                validator: (val) {
-                                  final regex = RegExp(
-                                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                                  );
-                                  if (val == null || !regex.hasMatch(val)) {
-                                    return "Masukkan email yang valid";
-                                  }
-                                  return null;
-                                },
-                                keyboardType: TextInputType.emailAddress,
-                                obscureText: false,
-                                suffixIcon: null,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Obx(
-                              () => ReusableButton(
-                                text: 'Kirim kode',
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    controller.sendOtp();
-                                  }
-                                },
-                                isLoading: controller.isLoading.value,
-                              ),
-                            ),
-                          ],
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                const SizedBox(
+                  height: 20,
+                ),
+                AutoSizeText(
+                  'Masukkan E-mail untuk mendapatkan kode OTP',
+                  style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(40.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Image.asset('assets/images/forgot_password.png'),
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              Form(
+                                key: formKey,
+                                child: ReusableInputField(
+                                  title: 'Masukkan E-mail lama',
+                                  controller: controller.emailController,
+                                  validator: (val) {
+                                    final regex = RegExp(
+                                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                    );
+                                    if (val == null || !regex.hasMatch(val)) {
+                                      return "Masukkan email yang valid";
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.emailAddress,
+                                  obscureText: false,
+                                  suffixIcon: null,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Obx(
+                                () => ReusableButton(
+                                  text: 'Kirim kode',
+                                  onPressed: () {
+                                    if (formKey.currentState!.validate()) {
+                                      controller.sendOtp(controller
+                                          .emailController.value.text);
+                                    }
+                                  },
+                                  isLoading: controller.isLoading.value,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -282,9 +293,11 @@ class NewEmailView extends GetView<SettingController> {
                                       keyboardType: TextInputType.emailAddress,
                                       suffixIcon: TextButton(
                                         onPressed: () {
-                                          if (controller.countDown.value <= 0 && controller.newEmailController.text.isNotEmpty) {
+                                          if (controller.countDown.value <= 0 &&
+                                              controller.newEmailController.text
+                                                  .isNotEmpty) {
                                             controller.sendOtpToNewEmail();
-                                          }else{
+                                          } else {
                                             formKey.currentState!.validate();
                                           }
                                         },
