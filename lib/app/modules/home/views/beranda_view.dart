@@ -98,13 +98,14 @@ class BerandaView extends GetView<HomeController> {
   }
 
   Widget _buildSectionTitle(String title, String route) {
+    double fontSize = Get.width * 0.055;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: TextStyle(
-            fontSize: 25,
+            fontSize: fontSize,
             fontFamily:
                 GoogleFonts.poppins(fontWeight: FontWeight.w700).fontFamily,
           ),
