@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/themes.dart';
@@ -20,6 +21,7 @@ class SettingView extends GetView<SettingController> {
     return Scaffold(
       backgroundColor: Themes.backgroundColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
@@ -111,10 +113,12 @@ class SettingView extends GetView<SettingController> {
                             ),
                           ),
                         ),
-                        title: AutoSizeText(
+                        title: Text(
                           controller.userController.user!.value.name ??
                               'Data tidak ditemukan',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.sp),
                         ),
                         subtitle: AutoSizeText(
                           controller.userController.user!.value.email ??

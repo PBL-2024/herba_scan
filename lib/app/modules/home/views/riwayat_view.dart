@@ -17,7 +17,7 @@ class RiwayatView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
         child: SingleChildScrollView(
           child: Column(
             children: [

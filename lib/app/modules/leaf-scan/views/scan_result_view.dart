@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/widgets/reusable_app_bar.dart';
@@ -30,7 +31,7 @@ class ScanResultView extends GetView<LeafScanController> {
                   borderRadius: BorderRadius.circular(20),
                   child: Image.file(
                     fit: BoxFit.cover,
-                    height: Get.height * 0.7,
+                    height: Get.height * 0.65.sp,
                     File(controller.capturedImage.value),
                   ),
                 ),

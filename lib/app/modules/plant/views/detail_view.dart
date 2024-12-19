@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,8 +45,7 @@ class PlantDetailView extends GetView<PlantController> {
           actions: [
             IconButton(
               onPressed: () {
-                controller.shareArticle(controller
-                    .selectedPlant.value!);
+                controller.shareArticle(controller.selectedPlant.value!);
               },
               icon: const Icon(Icons.share),
             ),
@@ -274,27 +274,30 @@ class PlantDetailView extends GetView<PlantController> {
 
   // Fungsi untuk membuat tombol tab
   Widget _buildTabButton(String label, int index) {
-    return ElevatedButton(
-      onPressed: () {
+    return InkWell(
+      borderRadius: BorderRadius.circular(20.0),
+      onTap: () {
         controller.detailMenu.value = index;
       },
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        backgroundColor: controller.detailMenu.value == index
-            ? Themes.buttonColor
-            : Colors.white,
-        foregroundColor: controller.detailMenu.value == index
-            ? Themes.backgroundColor
-            : Colors.black,
-        shape: RoundedRectangleBorder(
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 4.sp),
+        padding: EdgeInsets.all(8.sp),
+        decoration: BoxDecoration(
+          color: controller.detailMenu.value == index
+              ? Themes.buttonColor
+              : Colors.white,
           borderRadius: BorderRadius.circular(20.0),
         ),
-      ),
-      child: AutoSizeText(
-        label,
-        style: TextStyle(
-            fontFamily:
-                GoogleFonts.dmSans(fontWeight: FontWeight.w900).fontFamily),
+        child: Text(
+          label,
+          style: GoogleFonts.poppins(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.bold,
+            color: controller.detailMenu.value == index
+                ? Colors.green.shade100
+                : Colors.grey,
+          ),
+        ),
       ),
     );
   }
@@ -306,10 +309,10 @@ class PlantDetailView extends GetView<PlantController> {
         children: [
           Image.asset('assets/images/not-found.png'),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             "Tanaman Tidak Di Temukan",
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: Colors.grey,
             ),

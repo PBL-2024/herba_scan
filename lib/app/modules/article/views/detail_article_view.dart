@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,9 +15,9 @@ class ArticleDetailView extends GetView<ArticleController> {
   Widget build(BuildContext context) {
     final id = Get.parameters['id'];
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getArticleById(id!);
-      controller.isFavoriteArticle(id);
-      controller.fetchComments(id);
+      // controller.getArticleById(id!);
+      // controller.isFavoriteArticle(id);
+      // controller.fetchComments(id);
     });
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -40,8 +41,7 @@ class ArticleDetailView extends GetView<ArticleController> {
           actions: [
             IconButton(
               onPressed: () {
-                controller.shareArticle(controller
-                    .selectedArticle.value);
+                controller.shareArticle(controller.selectedArticle.value);
               },
               icon: const Icon(Icons.share),
             ),
@@ -119,11 +119,10 @@ class ArticleDetailView extends GetView<ArticleController> {
                                         color: Colors.grey, size: 16),
                                     const SizedBox(width: 4),
                                     Text(
-                                      controller
-                                          .selectedArticle.value.totalView
+                                      controller.selectedArticle.value.totalView
                                           .toString(),
-                                      style: const TextStyle(
-                                          color: Colors.grey),
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                     ),
                                   ],
                                 )
@@ -303,7 +302,13 @@ class ArticleDetailView extends GetView<ArticleController> {
                       : null,
                   backgroundColor: Colors.transparent,
                   child: comment.user?.imageUrl == null
-                      ? Icon(Icons.person)
+                      ? Container(
+                          padding: EdgeInsets.all(6.sp),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Icon(Icons.person))
                       : null,
                 ),
                 const SizedBox(width: 8.0),
@@ -312,15 +317,28 @@ class ArticleDetailView extends GetView<ArticleController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(comment.user!.name!,
+                      Container(
+                        constraints: BoxConstraints(maxWidth: 100.w),
+                        child: Text(
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          comment.user!.name!,
                           style: TextStyle(
+                              fontSize: 14.sp,
                               fontFamily: GoogleFonts.poppins(
                                       fontWeight: FontWeight.w600)
-                                  .fontFamily)),
+                                  .fontFamily),
+                        ),
+                      ),
                       Row(
                         children: [
-                          Text(controller.formatDate(comment.createdAt!),
-                              style: const TextStyle(color: Colors.grey)),
+                          Text(
+                            controller.formatDate(comment.createdAt!),
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -331,7 +349,7 @@ class ArticleDetailView extends GetView<ArticleController> {
             const SizedBox(height: 10.0),
             Text(
               comment.komentar!,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16.sp),
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:herba_scan/app/data/themes.dart';
@@ -112,11 +113,12 @@ class LeafScanView extends GetView<LeafScanController> {
                         controller.toggleFlash();
                       },
                       child: Icon(
-                          controller.flashOn.value
-                              ? Icons.flash_on
-                              : Icons.flash_off,
-                          color: Themes.backgroundColor,
-                          size: 30),
+                        controller.flashOn.value
+                            ? Icons.flash_on
+                            : Icons.flash_off,
+                        color: Themes.backgroundColor,
+                        size: 30.sp,
+                      ),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -132,7 +134,8 @@ class LeafScanView extends GetView<LeafScanController> {
                         });
                       },
                       child: Icon(Icons.camera_alt_outlined,
-                          color: Themes.backgroundColor, size: 50),
+                          color: Themes.backgroundColor,
+                          size: 30.sp),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -153,7 +156,7 @@ class LeafScanView extends GetView<LeafScanController> {
                         });
                       },
                       child: Icon(Icons.image,
-                          color: Themes.backgroundColor, size: 30),
+                          color: Themes.backgroundColor, size: 30.sp),
                     ),
                   ],
                 ),

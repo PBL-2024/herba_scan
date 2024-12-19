@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -98,14 +99,13 @@ class BerandaView extends GetView<HomeController> {
   }
 
   Widget _buildSectionTitle(String title, String route) {
-    double fontSize = Get.width * 0.055;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: TextStyle(
-            fontSize: fontSize,
+            fontSize: 16.sp,
             fontFamily:
                 GoogleFonts.poppins(fontWeight: FontWeight.w700).fontFamily,
           ),
@@ -113,7 +113,8 @@ class BerandaView extends GetView<HomeController> {
         const SizedBox(width: 8),
         ReusableButton(
           text: "Lihat Semua",
-          width: 150,
+          fontSize: 13.sp,
+          width: 130.sp,
           buttonStyle: ElevatedButton.styleFrom(
             backgroundColor: Themes.buttonColor,
             shape: RoundedRectangleBorder(
