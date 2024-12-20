@@ -15,9 +15,9 @@ class ArticleDetailView extends GetView<ArticleController> {
   Widget build(BuildContext context) {
     final id = Get.parameters['id'];
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // controller.getArticleById(id!);
-      // controller.isFavoriteArticle(id);
-      // controller.fetchComments(id);
+      controller.getArticleById(id!);
+      controller.isFavoriteArticle(id);
+      controller.fetchComments(id);
     });
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {

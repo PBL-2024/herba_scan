@@ -113,7 +113,7 @@ class BerandaView extends GetView<HomeController> {
         const SizedBox(width: 8),
         ReusableButton(
           text: "Lihat Semua",
-          fontSize: 13.sp,
+          fontSize: 12,
           width: 130.sp,
           buttonStyle: ElevatedButton.styleFrom(
             backgroundColor: Themes.buttonColor,
