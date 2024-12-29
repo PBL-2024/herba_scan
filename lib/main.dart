@@ -11,7 +11,7 @@ void main() async {
     ScreenUtilInit(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Application",
+        title: "HerbaScan",
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
       ),

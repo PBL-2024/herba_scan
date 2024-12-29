@@ -30,7 +30,7 @@ class ReusableButton extends StatelessWidget {
       child: ElevatedButton(
         style: buttonStyle ?? ElevatedButton.styleFrom(
           backgroundColor: Themes.buttonColor,
-          fixedSize: Size(double.infinity, 50.sp),
+          fixedSize: Size(double.infinity, 40.sp),
         ),
         onPressed: onPressed,
         child: isLoading
